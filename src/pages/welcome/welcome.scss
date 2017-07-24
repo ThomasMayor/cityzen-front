@@ -6,7 +6,7 @@ page-welcome {
       height: 45%;
       z-index: 1;
       background-repeat: repeat-x;
-      animation: animatedBackground 40s linear infinite;
+      animation: animatedBackground 60s ease infinite alternate;
     }
 
     @keyframes animatedBackground {

@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { IonicPage } from 'ionic-angular';
 
+import { Content } from 'ionic-angular';
+import { AuthenticationProvider } from '../../providers/authentication/authentication'
 /**
  * Generated class for the WelcomePage page.
  *
@@ -14,12 +16,40 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'welcome.html',
 })
 export class WelcomePage {
+  @ViewChild(Content) content: Content;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  showSignup :boolean = false;
+  showLogin:boolean = false;
+
+  constructor(private authentication: AuthenticationProvider) {
+
   }
 
+  login() {
+    if (!this.showLogin) {
+      this.showLogin = true;
+      setTimeout(() => { this.content.scrollToBottom(300) }, 1);
+    }
+    this.showSignup = false;
+  }
+
+  signup() {
+    if (!this.showSignup) {
+      this.showSignup = true;
+      setTimeout(() => { this.content.scrollToBottom(300) }, 1);
+    }
+    this.showLogin = false;
+  }
   ionViewDidLoad() {
     console.log('ionViewDidLoad WelcomePage');
+
+
   }
+
+  check() {
+    this.authentication.checkLogin();
+  }
+
+
 
 }

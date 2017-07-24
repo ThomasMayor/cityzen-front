@@ -1,0 +1,24 @@
+<!-- Generated template for the LoginComponent component -->
+<form [formGroup]="credentials" (submit)="doLogin()">
+  <ion-list>
+    <ion-item>
+      <h1>Connexion</h1>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Email</ion-label>
+      <ion-input type="email" formControlName="email" required></ion-input>
+    </ion-item>
+    <form-message [control]="credentials.controls.email"></form-message>
+
+    <ion-item>
+      <ion-label floating>Mot de passe</ion-label>
+      <ion-input type="password" formControlName="password" required></ion-input>
+    </ion-item>
+    <form-message [control]="credentials.controls.password"></form-message>
+
+    <div padding>
+      <button ion-button color="primary" block [disabled]="!credentials.valid">Connexion</button>
+    </div>
+
+  </ion-list>
+</form>
