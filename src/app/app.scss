@@ -14,3 +14,28 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+
+.main-menu {
+  .toolbar-background {
+    background-color: #1b5e20;
+  }
+  .main-menu .toolbar-title {
+    color: white;
+  }
+  .greenbg {
+    background-color: #1b5e20;
+  }
+  .menu-hholder {
+    height: 74px;
+  }
+  .splash-logo {
+    margin: auto;
+    background: url('../assets/img/appicon.png') no-repeat transparent;
+    background-size: 100%;
+    width: 128px;
+    height: 128px;
+    padding-top: 10px;
+    background-position-y: 10px;
+  }
+
+}

@@ -9,17 +9,26 @@ import { ConfigProvider } from '../config/config';
 @Injectable()
 export class ApiEndPointsProvider {
 
-  API_URL: string;
-  USER_PATH: string = '/api/users';
+  readonly API_URL: string;
+  readonly USER_PATH: string = '/api/users';
+  readonly REPORT_PATH: string = '/api/reports';
 
   constructor(public config: ConfigProvider) {
     this.API_URL = this.config.API_URL;
   }
 
+  get users(): string {
+    return this.API_URL + this.USER_PATH;
+  }
+
+  get reports(): string {
+    return this.API_URL + this.REPORT_PATH;
+  }
+
   get auth():string {
     return this.users + `/isauth`;
   }
- 
+
   get login():string {
     return this.users + `/auth`;
   }
@@ -28,9 +37,7 @@ export class ApiEndPointsProvider {
     return this.users + "/signup";
   }
 
-  get users(): string {
-    return this.API_URL + this.USER_PATH;
-  }
+  
 
 
 

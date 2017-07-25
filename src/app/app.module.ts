@@ -16,6 +16,7 @@ import { ConfigProvider } from '../providers/config/config';
 import { AuthenticationProvider } from '../providers/authentication/authentication';
 import { FormMessageProvider } from '../providers/form-message/form-message';
 import { UserProvider } from '../providers/user/user';
+import { ReportProvider } from '../providers/report/report';
 
 
 // Auth Factory
@@ -63,7 +64,8 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions, stor
     FormBuilder,
     FormMessageProvider,
     UserProvider,
-    Geolocation
+    Geolocation,
+    ReportProvider
   ]
 })
 export class AppModule {}

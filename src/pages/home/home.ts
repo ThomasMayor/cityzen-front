@@ -3,6 +3,7 @@ import { NavController, NavParams, IonicPage } from 'ionic-angular';
 import { MapComponent } from '../../components/map/map';
 import { Geolocation } from '@ionic-native/geolocation';
 import { ToastController } from 'ionic-angular';
+import { ReportProvider } from '../../providers/report/report';
 /**
  * Generated class for the HomePage page.
  *
@@ -22,23 +23,18 @@ export class HomePage {
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               private geolocation: Geolocation,
-              private toastCtrl: ToastController) {
+              private toastCtrl: ToastController,
+              private reportProvider: ReportProvider) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad HomePage');
-
-    this.geolocation.getCurrentPosition().then((resp) => {
-        this.map.init(resp.coords.latitude, resp.coords.longitude)
-        this.map.addMarker(resp.coords.latitude, resp.coords.longitude, 'Ma Position')
-    }).catch((error) => {
-        console.log('Error getting location', error);
-        let toast = this.toastCtrl.create({
-          message: error,
-          closeButtonText: 'Fermer',
-          showCloseButton: true
-        });
-        toast.present();
+    this.map.init().then(_ => {
+      this.reportProvider.loadAll().then(reports => {
+        console.log('report loaded', reports);
+        reports.forEach(report => this.map.addMarker(report.latitude, report.longitude, '', report.title, report));
+      });
     });
+
   }
 }

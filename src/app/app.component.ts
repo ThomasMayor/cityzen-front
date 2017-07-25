@@ -15,7 +15,7 @@ export class MyApp {
 
   rootPage: any = 'WelcomePage';
 
-  pages: Array<{title: string, page: string}>;
+  pages: Array<{title: string, page: string, icon: string}>;
 
   constructor(public platform: Platform,
               public statusBar: StatusBar,
@@ -28,7 +28,9 @@ export class MyApp {
 
     // used for an example of ngFor and navigation
     this.pages = [
-      { title: 'Carte', page: 'HomePage' }
+      { title: 'Carte des Constats', page: 'HomePage', icon: 'map' },
+      { title: 'Mes Constats', page: 'MyReportsPage', icon: 'clipboard' },
+      { title: 'Mon Profil', page: 'ProfilePage', icon: 'contact' },
     ];
     console.log('app component constructor');
     this.authentication.checkLogin();
@@ -64,6 +66,10 @@ export class MyApp {
     // we wouldn't want the back button to show in this scenario
     console.log('open page', page);
     //this.nav.setRoot(page.component);
+  }
+
+  logout() {
+    this.authentication.logout();
   }
 
   ionViewDidLoad() {
