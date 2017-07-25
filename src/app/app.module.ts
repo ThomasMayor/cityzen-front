@@ -7,6 +7,7 @@ import { Storage, IonicStorageModule} from "@ionic/storage";
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { FormBuilder } from '@angular/forms';
+import { Geolocation } from '@ionic-native/geolocation';
 
 import { MyApp } from './app.component';
 
@@ -14,6 +15,7 @@ import { ApiEndPointsProvider } from '../providers/api-end-points/api-end-points
 import { ConfigProvider } from '../providers/config/config';
 import { AuthenticationProvider } from '../providers/authentication/authentication';
 import { FormMessageProvider } from '../providers/form-message/form-message';
+import { UserProvider } from '../providers/user/user';
 
 
 // Auth Factory
@@ -59,7 +61,9 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions, stor
       deps: [Http, RequestOptions, Storage]
     },
     FormBuilder,
-    FormMessageProvider
+    FormMessageProvider,
+    UserProvider,
+    Geolocation
   ]
 })
 export class AppModule {}

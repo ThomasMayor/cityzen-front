@@ -34,7 +34,11 @@ export class AuthenticationProvider {
         console.log('Not Expired', this.endpoints.auth);
         this.authHttp.get(this.endpoints.auth)
                      .map(res => res.json())
-                     .map(jwt => this.handleJwtResponse(jwt));
+                     .map(jwt => this.handleJwtResponse(jwt))
+                     .take(1)
+                     .subscribe(
+                       () => { console.log('checkLogin 2'); }
+                     )
       }
       else {
         console.log('Expired');
@@ -64,9 +68,9 @@ export class AuthenticationProvider {
   private handleJwtResponse(jwt: any): Promise<string> {
     console.log('handleJwtResponse', jwt);
     if (!jwt.success)
-      Observable.throw(jwt.message);
+      throw Observable.throw(jwt.message);
     return this.storage.set('jwt', jwt.token)
-      .then(() =>  this.authUser.next(this.jwtHelper.decodeToken(jwt.token)))
+      .then(() => this.authUser.next(this.jwtHelper.decodeToken(jwt.token)))
       .then(() => jwt.token);
   }
 }

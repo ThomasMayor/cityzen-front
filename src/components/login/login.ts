@@ -31,10 +31,11 @@ export class LoginComponent {
     this.authentication.login(this.credentials.value)
                        .subscribe(
                          jwt => {},
-                         err => this.showToast(err.statusText));
+                         err => this.showToast(err.error));
   }
 
   showToast(msg: string) {
+    console.log('showing toast', msg)
     let toast = this.toastCtrl.create({
       message: msg,
       closeButtonText: 'Fermer',

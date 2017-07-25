@@ -6,13 +6,13 @@
     </ion-item>
     <ion-item>
       <ion-label floating>Email</ion-label>
-      <ion-input type="email" formControlName="email" required></ion-input>
+      <ion-input type="email" formControlName="email"></ion-input>
     </ion-item>
     <form-message [control]="credentials.controls.email"></form-message>
 
     <ion-item>
       <ion-label floating>Mot de passe</ion-label>
-      <ion-input type="password" formControlName="password" required></ion-input>
+      <ion-input type="password" formControlName="password" clearOnEdit="false" ></ion-input>
     </ion-item>
     <form-message [control]="credentials.controls.password"></form-message>
 

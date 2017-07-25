@@ -10,21 +10,26 @@ import { ConfigProvider } from '../config/config';
 export class ApiEndPointsProvider {
 
   API_URL: string;
+  USER_PATH: string = '/api/users';
 
   constructor(public config: ConfigProvider) {
     this.API_URL = this.config.API_URL;
   }
 
   get auth():string {
-    return this.API_URL + `/isauth`;
+    return this.users + `/isauth`;
   }
-
+ 
   get login():string {
-    return this.API_URL + `/auth`;
+    return this.users + `/auth`;
   }
 
   get signup():string {
-    return this.API_URL + "/signup";
+    return this.users + "/signup";
+  }
+
+  get users(): string {
+    return this.API_URL + this.USER_PATH;
   }
 
 

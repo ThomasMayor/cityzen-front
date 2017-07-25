@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import 'rxjs/add/operator/map';
-
+import { IConfigProvider } from './iconfig'
 /*
   Generated class for the ConfigProvider provider.
 
@@ -9,10 +7,14 @@ import 'rxjs/add/operator/map';
   for more info on providers and Angular DI.
 */
 @Injectable()
-export class ConfigProvider {
+export class ConfigProvider implements IConfigProvider {
 
     get API_URL(): string {
       return "http://localhost:8080";
+    }
+
+    get GOOGLE_API_KEY() : string {
+      return 'AIzaSyDw4GTGJsbwwcxyYnEbigb0D1uBwTzqDRE';
     }
 
 }
