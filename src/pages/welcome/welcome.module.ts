@@ -10,7 +10,7 @@ import { FormMessageComponent }  from '../../components/form-message/form-messag
     WelcomePage,
     LoginComponent,
     SignupComponent,
-    FormMessageComponent
+    FormMessageComponent,
   ],
   imports: [
     IonicPageModule.forChild(WelcomePage),

@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
-import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
+import { IonicApp, IonicErrorHandler, IonicModule, Events } from 'ionic-angular';
 import { JwtHelper, AuthConfig, AuthHttp } from "angular2-jwt";
 import { Http, HttpModule, RequestOptions } from "@angular/http";
 import { Storage, IonicStorageModule} from "@ionic/storage";
@@ -17,6 +17,7 @@ import { AuthenticationProvider } from '../providers/authentication/authenticati
 import { FormMessageProvider } from '../providers/form-message/form-message';
 import { UserProvider } from '../providers/user/user';
 import { ReportProvider } from '../providers/report/report';
+import { GoogleMapsProvider } from '../providers/google-maps/google-maps';
 
 
 // Auth Factory
@@ -65,7 +66,9 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions, stor
     FormMessageProvider,
     UserProvider,
     Geolocation,
-    ReportProvider
+    ReportProvider,
+    Events,
+    GoogleMapsProvider
   ]
 })
 export class AppModule {}

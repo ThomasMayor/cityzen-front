@@ -1,12 +1,15 @@
 import { Component, Input } from '@angular/core';
 import {} from '@types/googlemaps';
-import * as markercluster from 'js-marker-clusterer';
 import { Geolocation, Geoposition } from '@ionic-native/geolocation';
-import { ToastController } from 'ionic-angular';
+import { ToastController, PopoverController, Events } from 'ionic-angular';
 import { Observable } from 'rxjs';
 import * as MarkerClusterer from 'node-js-marker-clusterer';
 import { IReport } from '../../models/report';
 import { ReportProvider } from '../../providers/report/report';
+import { ReportPreviewPage } from '../../pages/report-preview/report-preview';
+import { GoogleMapsProvider } from '../../providers/google-maps/google-maps';
+
+
 /**
  * Generated class for the MapComponent component.
  *
@@ -33,49 +36,88 @@ export class MapComponent {
 
   constructor(private geolocation: Geolocation,
               private toastCtrl: ToastController,
-              private reportProvider: ReportProvider) {
-    console.log('Hello MapComponent Component');
+              private reportProvider: ReportProvider,
+              private popover: PopoverController,
+              private mapProvider: GoogleMapsProvider) {
   }
 
   public init(zoom:number=12): Promise<any> {
+    console.log('MapComponent:init ' + this.mapId);
     return new Promise<any>((resolve, reject) => {
-      console.log('MapComponent:init ' + this.mapId);
-      this.geolocation.getCurrentPosition().then((resp) => {
-          this.map = new google.maps.Map(document.getElementById(`map_canvas_${this.mapId}`), {
-             center: new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude),
-             zoom: zoom,
-             mapTypeId: google.maps.MapTypeId.ROADMAP
-          });
-          console.log('what is mc ?', MarkerClusterer);
-          //this.map.addListener('click', this.onMapClick);
-          this.map.addListener('click', ev => this.onMapClick(ev));
-          this.map.addListener('zoom_changed', ev => this.onZoomChanged(ev));
-          this.initUserMarker(resp.coords.latitude, resp.coords.longitude);
-          this.watch = this.geolocation.watchPosition();
-          this.watch.filter((p) => p.coords !== undefined)
-                    .subscribe((resp) => { this.userMarker.setPosition(new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude)) });
-          resolve();
-      }).catch(this.handleError)
-        .then(err => reject(err));
-    });
 
+      this.mapProvider.mapInitialized$.subscribe((initialized) => {
+        if (initialized) {
+          console.log('mapProvider.mapInitialized$', initialized);
+          this.geolocation.getCurrentPosition().then((resp) => {
+
+            this.map = new google.maps.Map(document.getElementById(`map_canvas_${this.mapId}`), {
+              center: new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude),
+              zoom: zoom,
+              mapTypeId: google.maps.MapTypeId.ROADMAP
+            });
+            //this.map.addListener('click', this.onMapClick);
+            this.map.addListener('click', ev => this.onMapClick(ev));
+            this.map.addListener('zoom_changed', ev => this.onZoomChanged(ev));
+            this.initUserMarker(resp.coords.latitude, resp.coords.longitude);
+            this.watch = this.geolocation.watchPosition();
+            this.watch.filter((p) => p.coords !== undefined)
+                      .subscribe((resp) => { this.userMarker.setPosition(new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude)) });
+            this.markerCluster = new MarkerClusterer(this.map, this.markers, {imagePath: '/assets/img/m'});
+            resolve();
+          }).catch((err) => { this.handleError(err); })
+            .then(err => reject(err));
+        }
+      })
+        
+    })     
   }
 
   private onMapClick(e:google.maps.MouseEvent) {
+
     //this.addMarker(e.latLng.lat(), e.latLng.lng(), '', '');
+    console.log("onMapClick", e, this);
+    this.markerIndex++;
+    let report:IReport = {
+      title: 'Report ' + this.markerIndex,
+      description: 'Description du report ' + this.markerIndex,
+      pictures: [],
+      approved: [],
+      disapproved: [],
+      created: '',
+      user_id: '',
+      latitude: e.latLng.lat(),
+      longitude: e.latLng.lng()
+    }
+    this.reportProvider.insert(report)
+                       .subscribe(
+                         (data) => {
+                           console.log('report inserted', data.report);
+                           this.addMarker(data.report.latitude, data.report.longitude, '', data.report.title, data.report);
+                         },
+                         (err) => {
+                           this.handleError(err)
+                         })
   }
 
   private onMarkerClick(e:google.maps.MouseEvent, marker:any) {
-    console.log('markerClick ', marker.index);
+    console.log('markerClick ', marker.data);
+    this.presentPopover(e, marker.data);
   }
 
   private onZoomChanged(e) {
-    this.rebuildClusterer();
 
   }
 
+  presentPopover(ev, report) {
+    console.log('presentPopover', ev, report);
+    let popover = this.popover.create(ReportPreviewPage, { report: report });
+    popover.present({
+      ev: ev
+    });
+  }
+
   private handleError(error) {
-    console.log('Error', error);
+    console.log('Error', error, this.toastCtrl);
     let toast = this.toastCtrl.create({
       message: error.message ? error.message : error,
       closeButtonText: 'Fermer',
@@ -103,35 +145,26 @@ export class MapComponent {
   }
 
   public addMarker(lat:number, long:number, color:string, title:string, data: any) {
-
-     let icon = {
-       path: this.MAP_PIN_2,
-       anchor: new google.maps.Point(25,50),
-       fillColor: '#039be5',
-       fillOpacity: 0.8,
-       scale: 0.8,
-       strokeColor: 'white',
-       strokeWeight: 2,
-     };
-     let marker = new google.maps.Marker({
-       position: new google.maps.LatLng(lat, long),
-       title: title,
-       icon: icon,
-     /*  map: this.map,*/
-     });
-     (<any>marker).data = data;
-     marker.addListener('click', ev => this.onMarkerClick(ev, marker))
-     this.markers.push(marker);
-     this.rebuildClusterer();
-
-
-  }
-
-  private rebuildClusterer() {
-    console.log('rebuildClusterer', this);
-    this.markerCluster = new MarkerClusterer(this.map, this.markers,
-            {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
-
+    //console.log('addMarker', lat, long, data)
+    let icon = {
+      path: this.MAP_PIN_2,
+      anchor: new google.maps.Point(25,50),
+      fillColor: '#039be5',
+      fillOpacity: 0.8,
+      scale: 0.8,
+      strokeColor: 'white',
+      strokeWeight: 2,
+    };
+    let marker = new google.maps.Marker({
+      position: new google.maps.LatLng(lat, long),
+      title: title,
+      icon: icon/*,
+      map: this.map,*/
+    });
+    (<any>marker).data = data;
+    marker.addListener('click', ev => this.onMarkerClick(ev, marker))
+    this.markers.push(marker);
+    this.markerCluster.addMarkers([marker], false);
   }
 
   public addMarker2(lat:number, long:number, color:string, title:string) {

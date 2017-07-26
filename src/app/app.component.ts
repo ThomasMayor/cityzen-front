@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Platform } from 'ionic-angular';
+import { Platform, Events } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
@@ -14,14 +14,15 @@ export class MyApp {
   //@ViewChild(Nav) nav: Nav;
 
   rootPage: any = 'WelcomePage';
-
+  counter: number = 0;
   pages: Array<{title: string, page: string, icon: string}>;
 
   constructor(public platform: Platform,
               public statusBar: StatusBar,
               public splashScreen: SplashScreen,
               private authentication: AuthenticationProvider,
-              private config: ConfigProvider) {
+              private config: ConfigProvider,
+              private events: Events) {
 
     this.initializeApp();
     this.initializeScripts();
@@ -43,14 +44,15 @@ export class MyApp {
   }
 
   initializeScripts() {
-    let script = document.createElement("script");
+    /*let script = document.createElement("script");
     script.type = "text/javascript";
-    script.src =`https://maps.googleapis.com/maps/api/js?key=${this.config.GOOGLE_API_KEY}&language=fr`;
+    script.src =`https://maps.googleapis.com/maps/api/js?key=${this.config.GOOGLE_API_KEY}&language=fr&callback=mapInit`;
     script.defer = true;
     script.async = true;
     script.id = "googleMaps";
-    document.body.appendChild(script);
+    document.body.appendChild(script);*/
   }
+
 
   initializeApp() {
     this.platform.ready().then(() => {
@@ -61,10 +63,15 @@ export class MyApp {
     });
   }
 
-  openPage(page) {
+  openPage($ev, page) {
+    this.events.publish('eventName', {test: 'toto ' + this.counter++});
+    if (page.title == "Mes Constats")
+      this.events.subscribe('eventName', (data) => {
+        console.log('eventName ', data);
+      })
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
-    console.log('open page', page);
+    console.log('open page', page, $ev);
     //this.nav.setRoot(page.component);
   }
 
