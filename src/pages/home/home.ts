@@ -37,5 +37,6 @@ export class HomePage {
 
   displayReport(report: IReport) {
     console.log('Should display', report);
+    this.navCtrl.push('ReportPage', { report: report});
   }
 }

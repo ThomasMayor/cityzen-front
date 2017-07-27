@@ -25,9 +25,8 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions, stor
   const authConfig = new AuthConfig({
     noJwtError: true,
     globalHeaders: [{'Accept': 'application/json'}],
-    tokenGetter: (() => { console.log('tokenGetter'); return storage.get('jwt'); }),
+    tokenGetter: (() => storage.get('jwt')),
   });
-  console.log('authHttpServiceFactory');
   return new AuthHttp(authConfig, http, options);
 }
 

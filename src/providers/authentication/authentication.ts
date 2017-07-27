@@ -60,9 +60,7 @@ export class AuthenticationProvider {
   signup(user: IUser): Observable<any> {
     return this.http.post(this.endpoints.signup, user)
       .map(response => response.json())
-      .map(jwt => {
-        this.handleJwtResponse(jwt)
-      });
+      .map(jwt => { this.handleJwtResponse(jwt) });
   }
 
   private handleJwtResponse(jwt: any): Promise<string> {
