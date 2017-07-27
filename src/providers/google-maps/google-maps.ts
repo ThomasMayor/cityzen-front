@@ -16,7 +16,7 @@ export class GoogleMapsProvider {
   constructor(private config: ConfigProvider) {
     console.log('Hello GoogleMapsProvider Provider');
     window['mapInit'] = () => { this.onMapInitialized(); }
-    setTimeout(_ => this.initializeScripts(), 10000);
+    this.initializeScripts();
   }
 
   initializeScripts() {

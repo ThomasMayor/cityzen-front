@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, IonicPage } from 'ionic-angular';
+import { IReport } from '../../models/report';
 
 /**
  * Generated class for the ReportPreviewPage page.
@@ -14,8 +15,10 @@ import { NavController, NavParams, IonicPage } from 'ionic-angular';
   templateUrl: 'report-preview.html',
 })
 export class ReportPreviewPage {
-
+  private report: IReport
   constructor(public navCtrl: NavController, public navParams: NavParams) {
+    this.report = navParams.get('report');
+    console.log(this.report);
   }
 
   ionViewDidLoad() {

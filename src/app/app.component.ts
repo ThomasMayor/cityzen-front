@@ -64,13 +64,7 @@ export class MyApp {
   }
 
   openPage($ev, page) {
-    this.events.publish('eventName', {test: 'toto ' + this.counter++});
-    if (page.title == "Mes Constats")
-      this.events.subscribe('eventName', (data) => {
-        console.log('eventName ', data);
-      })
-    // Reset the content nav to have just this page
-    // we wouldn't want the back button to show in this scenario
+
     console.log('open page', page, $ev);
     //this.nav.setRoot(page.component);
   }

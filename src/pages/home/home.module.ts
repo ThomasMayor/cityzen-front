@@ -7,7 +7,7 @@ import { MapComponent } from '../../components/map/map';
 @NgModule({
   declarations: [
     HomePage,
-    MapComponent,
+    MapComponent
   ],
   imports: [
     IonicPageModule.forChild(HomePage),

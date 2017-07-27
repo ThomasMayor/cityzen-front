@@ -1,7 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import {} from '@types/googlemaps';
 import { Geolocation, Geoposition } from '@ionic-native/geolocation';
-import { ToastController, PopoverController, Events } from 'ionic-angular';
+import { ToastController, AlertController } from 'ionic-angular';
 import { Observable } from 'rxjs';
 import * as MarkerClusterer from 'node-js-marker-clusterer';
 import { IReport } from '../../models/report';
@@ -25,6 +25,10 @@ export class MapComponent {
   @Input()
   mapId: string;
 
+  @Output()
+  displayReport: EventEmitter<IReport> = new EventEmitter<IReport>();
+
+
   private readonly MAP_PIN:string = 'M0-48c-9.8 0-17.7 7.8-17.7 17.4 0 15.5 17.7 30.6 17.7 30.6s17.7-15.4 17.7-30.6c0-9.6-7.9-17.4-17.7-17.4z';
   private readonly MAP_PIN_2:string = 'M25 0c-8.284 0-15 6.656-15 14.866 0 8.211 15 35.135 15 35.135s15-26.924 15-35.135c0-8.21-6.716-14.866-15-14.866zm-.049 19.312c-2.557 0-4.629-2.055-4.629-4.588 0-2.535 2.072-4.589 4.629-4.589 2.559 0 4.631 2.054 4.631 4.589 0 2.533-2.072 4.588-4.631 4.588z';
   private map: google.maps.Map;
@@ -37,17 +41,15 @@ export class MapComponent {
   constructor(private geolocation: Geolocation,
               private toastCtrl: ToastController,
               private reportProvider: ReportProvider,
-              private popover: PopoverController,
+              private alertCtrl: AlertController,
               private mapProvider: GoogleMapsProvider) {
   }
 
   public init(zoom:number=12): Promise<any> {
-    console.log('MapComponent:init ' + this.mapId);
     return new Promise<any>((resolve, reject) => {
 
       this.mapProvider.mapInitialized$.subscribe((initialized) => {
         if (initialized) {
-          console.log('mapProvider.mapInitialized$', initialized);
           this.geolocation.getCurrentPosition().then((resp) => {
 
             this.map = new google.maps.Map(document.getElementById(`map_canvas_${this.mapId}`), {
@@ -68,14 +70,14 @@ export class MapComponent {
             .then(err => reject(err));
         }
       })
-        
-    })     
+
+    })
   }
 
   private onMapClick(e:google.maps.MouseEvent) {
-
+    //this.addMarker(e.latLng.lat(), e.latLng.lng(), '', '', {});
     //this.addMarker(e.latLng.lat(), e.latLng.lng(), '', '');
-    console.log("onMapClick", e, this);
+    /*console.log("onMapClick", e, this);
     this.markerIndex++;
     let report:IReport = {
       title: 'Report ' + this.markerIndex,
@@ -96,24 +98,38 @@ export class MapComponent {
                          },
                          (err) => {
                            this.handleError(err)
-                         })
+                         })*/
   }
 
   private onMarkerClick(e:google.maps.MouseEvent, marker:any) {
-    console.log('markerClick ', marker.data);
-    this.presentPopover(e, marker.data);
+    this.alertReport(e, marker.data);
   }
 
   private onZoomChanged(e) {
+    console.log('onZoomChanged', this.map.getZoom())
+  }
+
+  private alertReport(ev, report:IReport) {
+    console.log('alertReport', ev, report);
+    let prompt = this.alertCtrl.create({
+      title: report.title,
+      message: report.description,
+      buttons: [
+        {text: 'Fermer'},
+        {
+          text: 'Afficher',
+          handler: data => {
+            this.showReport(report);
+          }
+        }
+      ]
+    }).present();
 
   }
 
-  presentPopover(ev, report) {
-    console.log('presentPopover', ev, report);
-    let popover = this.popover.create(ReportPreviewPage, { report: report });
-    popover.present({
-      ev: ev
-    });
+  private showReport(report: IReport) {
+    console.log('emitting event', report)
+    this.displayReport.emit(report);
   }
 
   private handleError(error) {

@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { NavController, NavParams, IonicPage } from 'ionic-angular';
 import { MapComponent } from '../../components/map/map';
 import { ReportProvider } from '../../providers/report/report';
+import { IReport } from '../../models/report';
 /**
  * Generated class for the HomePage page.
  *
@@ -23,7 +24,7 @@ export class HomePage {
               private reportProvider: ReportProvider) {
   }
 
-  ionViewDidLoad() { 
+  ionViewDidLoad() {
     console.log('ionViewDidLoad HomePage');
     this.map.init().then(_ => {
       this.reportProvider.loadAll().then(reports => {
@@ -32,5 +33,9 @@ export class HomePage {
       });
     });
 
+  }
+
+  displayReport(report: IReport) {
+    console.log('Should display', report);
   }
 }
