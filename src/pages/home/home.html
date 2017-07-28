@@ -12,4 +12,9 @@
     <ion-title>Carte des Constats</ion-title>
   </ion-navbar>
 </ion-header>
-<map mapId="mainMap" (displayReport)="displayReport($event)"></map>
+<ion-content>
+  <map mapId="mainMap" (reportClick)="reportClick($event)"></map>
+  <ion-fab right bottom *ngIf="map.initialized">
+  <button ion-fab (click)="addReport()"><ion-icon name="add"></ion-icon></button>
+ </ion-fab>
+</ion-content>

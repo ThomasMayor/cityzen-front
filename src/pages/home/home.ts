@@ -19,24 +19,29 @@ export class HomePage {
   @ViewChild(MapComponent)
   private map: MapComponent;
 
+
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               private reportProvider: ReportProvider) {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad HomePage');
-    this.map.init().then(_ => {
+    console.log('ionViewDidLoad HomePage', this.map);
+    this.map.init(true).then(_ => {
       this.reportProvider.loadAll().then(reports => {
-        console.log('report loaded', reports);
-        reports.forEach(report => this.map.addMarker(report.latitude, report.longitude, '', report.title, report));
+        reports.forEach(report => this.map.addMarker(report.latitude, report.longitude, '', report));
       });
     });
-
   }
 
-  displayReport(report: IReport) {
+
+
+  reportClick(report: IReport) {
     console.log('Should display', report);
     this.navCtrl.push('ReportPage', { report: report});
+  }
+
+  addReport() {
+    console.log('addReport');
   }
 }

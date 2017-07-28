@@ -26,7 +26,7 @@ export class MapComponent {
   mapId: string;
 
   @Output()
-  displayReport: EventEmitter<any> = new EventEmitter<any>();
+  reportClick: EventEmitter<any> = new EventEmitter<any>();
 
 
   private readonly MAP_PIN:string = 'M0-48c-9.8 0-17.7 7.8-17.7 17.4 0 15.5 17.7 30.6 17.7 30.6s17.7-15.4 17.7-30.6c0-9.6-7.9-17.4-17.7-17.4z';
@@ -37,6 +37,7 @@ export class MapComponent {
   private markerIndex: number = 0;
   private markers: Array<google.maps.Marker> = [];
   private markerCluster: MarkerClusterer;
+  public initialized: boolean = false;
 
   constructor(private geolocation: Geolocation,
               private toastCtrl: ToastController,
@@ -45,21 +46,19 @@ export class MapComponent {
               private mapProvider: GoogleMapsProvider) {
   }
 
-  public init(zoom:number=12): Promise<any> {
+  public init(centerOnUser: boolean, latitude?:number, longitude?:number, zoom:number=12): Promise<any> {
     return new Promise<any>((resolve, reject) => {
-
+ 
       this.mapProvider.mapInitialized$.subscribe((initialized) => {
+        this.initialized = initialized;
         if (initialized) {
+          if (!centerOnUser) {
+            this.initMap(latitude, longitude, zoom);
+          }
           this.geolocation.getCurrentPosition().then((resp) => {
-
-            this.map = new google.maps.Map(document.getElementById(`map_canvas_${this.mapId}`), {
-              center: new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude),
-              zoom: zoom,
-              mapTypeId: google.maps.MapTypeId.ROADMAP
-            });
-            //this.map.addListener('click', this.onMapClick);
-            this.map.addListener('click', ev => this.onMapClick(ev));
-            this.map.addListener('zoom_changed', ev => this.onZoomChanged(ev));
+            if (centerOnUser) {
+              this.initMap(resp.coords.latitude, resp.coords.longitude, zoom);
+            }
             this.initUserMarker(resp.coords.latitude, resp.coords.longitude);
             this.watch = this.geolocation.watchPosition();
             this.watch.filter((p) => p.coords !== undefined)
@@ -74,39 +73,28 @@ export class MapComponent {
     })
   }
 
-  private onMapClick(e:google.maps.MouseEvent) {
-    //this.addMarker(e.latLng.lat(), e.latLng.lng(), '', '', {});
-    //this.addMarker(e.latLng.lat(), e.latLng.lng(), '', '');
-    /*console.log("onMapClick", e, this);
-    this.markerIndex++;
-    let report:IReport = {
-      title: 'Report ' + this.markerIndex,
-      description: 'Description du report ' + this.markerIndex,
-      pictures: [],
-      approved: [],
-      disapproved: [],
-      created: '',
-      user_id: '',
-      latitude: e.latLng.lat(),
-      longitude: e.latLng.lng()
-    }
-    this.reportProvider.insert(report)
-                       .subscribe(
-                         (data) => {
-                           console.log('report inserted', data.report);
-                           this.addMarker(data.report.latitude, data.report.longitude, '', data.report.title, data.report);
-                         },
-                         (err) => {
-                           this.handleError(err)
-                         })*/
+  private initMap(latitude:number, longitude:number, zoom: number) {
+    console.log('initMap');
+    this.map = new google.maps.Map(document.getElementById(`map_canvas_${this.mapId}`), {
+      center: new google.maps.LatLng(latitude, longitude),
+      zoom: zoom,
+      maxZoom: 20,
+      clickableIcons: false,
+      mapTypeControl: false,
+      fullscreenControl: false,
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      streetViewControlOptions: {
+        position: google.maps.ControlPosition.TOP_RIGHT
+      },
+      zoomControlOptions: {
+        position: google.maps.ControlPosition.TOP_RIGHT,
+        style: google.maps.ZoomControlStyle.DEFAULT
+      }
+    });
   }
 
   private onMarkerClick(e:google.maps.MouseEvent, marker:any) {
     this.alertReport(e, marker.data);
-  }
-
-  private onZoomChanged(e) {
-    console.log('onZoomChanged', this.map.getZoom())
   }
 
   private alertReport(ev, report:IReport) {
@@ -130,7 +118,7 @@ export class MapComponent {
 
   private showReport(report: IReport) {
     console.log('emitting event', report)
-    this.displayReport.emit(report);
+    this.reportClick.emit(report);
   }
 
   private handleError(error) {
@@ -161,7 +149,7 @@ export class MapComponent {
     this.userMarker.setZIndex(1000);
   }
 
-  public addMarker(lat:number, long:number, color:string, title:string, data: any) {
+  public addMarker(lat:number, long:number, color:string, data: any) {
     //console.log('addMarker', lat, long, data)
     let icon = {
       path: this.MAP_PIN_2,
@@ -174,9 +162,7 @@ export class MapComponent {
     };
     let marker = new google.maps.Marker({
       position: new google.maps.LatLng(lat, long),
-      title: title,
-      icon: icon/*,
-      map: this.map,*/
+      icon: icon
     });
     (<any>marker).data = data;
     marker.addListener('click', ev => this.onMarkerClick(ev, marker))

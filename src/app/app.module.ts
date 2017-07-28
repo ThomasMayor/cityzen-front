@@ -18,6 +18,7 @@ import { FormMessageProvider } from '../providers/form-message/form-message';
 import { UserProvider } from '../providers/user/user';
 import { ReportProvider } from '../providers/report/report';
 import { GoogleMapsProvider } from '../providers/google-maps/google-maps';
+import { MapComponentModule } from '../components/map/map.module';
 
 
 // Auth Factory
@@ -43,6 +44,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions, stor
       name: 'myapp',
       driverOrder: ['localstorage']
     }),
+    MapComponentModule,
   ],
   bootstrap: [IonicApp],
   entryComponents: [

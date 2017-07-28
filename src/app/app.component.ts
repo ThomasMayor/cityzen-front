@@ -16,6 +16,7 @@ export class MyApp {
   rootPage: any = 'WelcomePage';
   counter: number = 0;
   pages: Array<{title: string, page: string, icon: string}>;
+  private initialized: boolean = false;
 
   constructor(public platform: Platform,
               public statusBar: StatusBar,
@@ -25,7 +26,6 @@ export class MyApp {
               private events: Events) {
 
     this.initializeApp();
-    this.initializeScripts();
 
     // used for an example of ngFor and navigation
     this.pages = [
@@ -33,9 +33,13 @@ export class MyApp {
       { title: 'Mes Constats', page: 'MyReportsPage', icon: 'clipboard' },
       { title: 'Mon Profil', page: 'ProfilePage', icon: 'contact' },
     ];
-    console.log('app component constructor');
-    this.authentication.checkLogin();
+
     this.authentication.authUser$.subscribe(user => {
+      if (!this.initialized) {
+        this.statusBar.styleDefault();
+        this.splashScreen.hide();
+        this.initialized = true;
+      }
       console.log('user authentication', user);
       this.rootPage = user != null ? 'HomePage' : 'WelcomePage';
     },
@@ -43,23 +47,13 @@ export class MyApp {
 
   }
 
-  initializeScripts() {
-    /*let script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src =`https://maps.googleapis.com/maps/api/js?key=${this.config.GOOGLE_API_KEY}&language=fr&callback=mapInit`;
-    script.defer = true;
-    script.async = true;
-    script.id = "googleMaps";
-    document.body.appendChild(script);*/
-  }
-
 
   initializeApp() {
     this.platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
-      this.statusBar.styleDefault();
-      this.splashScreen.hide();
+      this.authentication.checkLogin();
+
     });
   }
 
