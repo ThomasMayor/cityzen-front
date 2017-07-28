@@ -7,16 +7,35 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>{{'toto'}}</ion-title>
+    <ion-title>{{report.title}}</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
-<ion-content padding>
+<ion-content>
   <div class="container">
-    <map mapId="reportMap"></map>
+    <map mapId="reportMap" (reportClick)="reportClick($event)"></map>
   </div>
+  <div class="container">
+    <ion-slides pager loop>
 
+      <ion-slide style="background-color: green">
+        <h2>Slide 1</h2>
+      </ion-slide>
 
+      <ion-slide style="background-color: blue">
+        <h2>Slide 2</h2>
+      </ion-slide>
+
+      <ion-slide style="background-color: red">
+        <h2>Slide 3</h2>
+      </ion-slide>
+
+    </ion-slides>
+  </div>
+  <div class="container" padding>
+    <p>{{report.description}}</p>
+    <p>{{report.created}}</p>
+  </div>
 </ion-content>

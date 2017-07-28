@@ -17,16 +17,23 @@ import { GoogleMapsProvider } from '../../providers/google-maps/google-maps';
   templateUrl: 'report.html',
 })
 export class ReportPage {
+
   @ViewChild(MapComponent)
   private map: MapComponent;
+
 
   private report:IReport;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               private googleMapsProvider: GoogleMapsProvider) {
-    this.report = navParams.get('report');
-    googleMapsProvider.mapInitialized$.subscribe((initialized) => {
+    this.report = this.navParams.get('report');
+    
+  }
+
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad', this.report, this.map)
+    this.googleMapsProvider.mapInitialized$.subscribe((initialized) => {
       if (initialized) {
         console.log('before init')
         this.map.init(false, this.report.latitude, this.report.longitude);
@@ -36,8 +43,9 @@ export class ReportPage {
     })
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad ReportPage');
+  reportClick(report) {
+    console.log('ReportPage.reportClick', report)
   }
+
 
 }

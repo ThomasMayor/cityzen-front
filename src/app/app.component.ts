@@ -14,7 +14,6 @@ export class MyApp {
   //@ViewChild(Nav) nav: Nav;
 
   rootPage: any = 'WelcomePage';
-  counter: number = 0;
   pages: Array<{title: string, page: string, icon: string}>;
   private initialized: boolean = false;
 

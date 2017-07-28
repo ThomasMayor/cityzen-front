@@ -63,7 +63,7 @@ export class MapComponent {
             this.watch = this.geolocation.watchPosition();
             this.watch.filter((p) => p.coords !== undefined)
                       .subscribe((resp) => { this.userMarker.setPosition(new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude)) });
-            this.markerCluster = new MarkerClusterer(this.map, this.markers, {imagePath: '/assets/img/m'});
+            
             resolve();
           }).catch((err) => { this.handleError(err); })
             .then(err => reject(err));
@@ -91,6 +91,7 @@ export class MapComponent {
         style: google.maps.ZoomControlStyle.DEFAULT
       }
     });
+    this.markerCluster = new MarkerClusterer(this.map, this.markers, {imagePath: '/assets/img/m'});
   }
 
   private onMarkerClick(e:google.maps.MouseEvent, marker:any) {

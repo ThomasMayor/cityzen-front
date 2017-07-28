@@ -63,12 +63,11 @@ export class AuthenticationProvider {
       .map(jwt => { this.handleJwtResponse(jwt) });
   }
 
-  private handleJwtResponse(jwt: any): Promise<string> {
+  private handleJwtResponse(jwt: any) {
     console.log('handleJwtResponse', jwt);
     if (!jwt.success)
       throw Observable.throw(jwt.message);
-    return this.storage.set('jwt', jwt.token)
+    this.storage.set('jwt', jwt.token)
       .then(() => this.authUser.next(this.jwtHelper.decodeToken(jwt.token)))
-      .then(() => jwt.token);
   }
 }

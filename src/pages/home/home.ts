@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController, NavParams, IonicPage } from 'ionic-angular';
+import { NavController, NavParams, IonicPage, ModalController} from 'ionic-angular';
 import { MapComponent } from '../../components/map/map';
 import { ReportProvider } from '../../providers/report/report';
 import { IReport } from '../../models/report';
@@ -22,7 +22,8 @@ export class HomePage {
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
-              private reportProvider: ReportProvider) {
+              private reportProvider: ReportProvider,
+              public modalCtrl: ModalController) {
   }
 
   ionViewDidLoad() {
@@ -38,7 +39,9 @@ export class HomePage {
 
   reportClick(report: IReport) {
     console.log('Should display', report);
-    this.navCtrl.push('ReportPage', { report: report});
+    //this.navCtrl.push('ReportPage', { report: report});
+    let modal = this.modalCtrl.create('ReportPage', { report: report });
+    modal.present();
   }
 
   addReport() {
