@@ -29,6 +29,22 @@ export class ReportProvider {
       .map(response => response.json())
   }
 
+  approve(report: IReport): Observable<any> {
+    let url = this.endpoints.reportApprove.replace(/\:rid/g, report._id);
+    console.log('ReportProvider.approve', report, url);
+    return this.authHttp.post(url, {})
+                        .map(response => response.json())
+                        .take(1);
+  }
+
+  disapprove(report: IReport): Observable<any> {
+    let url = this.endpoints.reportDisapprove.replace(/\:rid/g, report._id);
+    console.log('ReportProvider.approve', report, url);
+    return this.authHttp.post(url, {})
+                        .map(response => response.json())
+                        .take(1);
+  }
+
   loadAll(): Promise<any[]> {
     return new Promise((resolve, reject) => {
       this.authHttp.get(this.endpoints.reports)
@@ -36,6 +52,7 @@ export class ReportProvider {
                    .take(1)
                    .subscribe(
                      data => {
+                       console.log('Reports loaded', data)
                        this.reports.next(data);
                        resolve(data);
                      },

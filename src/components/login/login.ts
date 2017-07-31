@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 
 import { AuthenticationProvider } from '../../providers/authentication/authentication'
@@ -15,19 +15,28 @@ import { ToastController } from 'ionic-angular';
   templateUrl: 'login.html'
 })
 export class LoginComponent {
+
+  @ViewChild('inputPasswordLogin')
+  private inputPassword;
+
   private credentials: FormGroup;
+  private showPassword: boolean = false;
 
   constructor(private authentication: AuthenticationProvider,
               private toastCtrl: ToastController,
               private formBuilder: FormBuilder) {
-    console.log('Hello LoginComponent Component');
     this.credentials = this.formBuilder.group({
       email: ['', Validators.compose([Validators.required, Validators.email])],
       password: ['', Validators.compose([Validators.required, Validators.minLength(6)])]
     });
   }
+
+  togglePassword() {
+    this.showPassword = !this.showPassword;
+    this.inputPassword._elementRef.nativeElement.firstElementChild.type = this.showPassword ? 'text' : 'password';
+  }
+
   doLogin() {
-    console.log(this.credentials.value);
     this.authentication.login(this.credentials.value)
                        .subscribe(
                          jwt => {},
@@ -35,7 +44,6 @@ export class LoginComponent {
   }
 
   showToast(msg: string) {
-    console.log('showing toast', msg)
     let toast = this.toastCtrl.create({
       message: msg,
       closeButtonText: 'Fermer',

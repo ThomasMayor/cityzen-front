@@ -17,15 +17,15 @@
 
 .main-menu {
   .toolbar-background {
-    background-color: #1b5e20;
+    background-color: color($colors, primary);
   }
   .main-menu .toolbar-title {
     color: white;
   }
   .greenbg {
-    background-color: #1b5e20;
+    background-color: color($colors, primary);
   }
-  .menu-hholder {
+  .menu-holder {
     height: 74px;
   }
   .splash-logo {
@@ -38,4 +38,16 @@
     background-position-y: 10px;
   }
 
+}
+body {
+  ion-title .toolbar-title-md {
+    font-weight: 300;
+  }
+
+  .alert-md .alert-message {
+    white-space: pre-wrap;
+  }
+  .note-md {
+    color : #676767;
+  }
 }

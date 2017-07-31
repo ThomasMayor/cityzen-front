@@ -15,6 +15,6 @@
 <ion-content>
   <map mapId="mainMap" (reportClick)="reportClick($event)"></map>
   <ion-fab right bottom *ngIf="map.initialized">
-  <button ion-fab (click)="addReport()"><ion-icon name="add"></ion-icon></button>
+    <button ion-fab (click)="addReport()" color="secondary"><ion-icon name="add"></ion-icon></button>
  </ion-fab>
 </ion-content>

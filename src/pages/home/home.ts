@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController, NavParams, IonicPage, ModalController} from 'ionic-angular';
+import { NavController, NavParams, IonicPage, ModalController, AlertController, PopoverController} from 'ionic-angular';
 import { MapComponent } from '../../components/map/map';
 import { ReportProvider } from '../../providers/report/report';
 import { IReport } from '../../models/report';
@@ -23,7 +23,9 @@ export class HomePage {
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               private reportProvider: ReportProvider,
-              public modalCtrl: ModalController) {
+              public modalCtrl: ModalController,
+              private alertCtrl: AlertController,
+              private popoverCtrl: PopoverController) {
   }
 
   ionViewDidLoad() {
@@ -35,16 +37,36 @@ export class HomePage {
     });
   }
 
-
-
   reportClick(report: IReport) {
+    console.log('report click');
+    /*let popover = this.popoverCtrl.create('ReportPreviewPage', { report: report });
+    popover.present()*/
+    let prompt = this.alertCtrl.create({
+      title: report.title,
+      message: report.description,
+      buttons: [
+        {text: 'Fermer'},
+        {
+          text: 'Afficher',
+          handler: data => {
+            console.log('alert click', report);
+            this.showReport(report);
+          }
+        }
+      ]
+    }).present();
+ }
+
+ showReport(report) {
+
     console.log('Should display', report);
-    //this.navCtrl.push('ReportPage', { report: report});
-    let modal = this.modalCtrl.create('ReportPage', { report: report });
-    modal.present();
+    this.navCtrl.push('ReportPage', { report: report});
+    /*let modal = this.modalCtrl.create('ReportPage', { report: report });
+    modal.present();*/
   }
 
   addReport() {
     console.log('addReport');
+    this.navCtrl.push('NewReportPage');
   }
 }

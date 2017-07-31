@@ -18,6 +18,8 @@ import { FormMessageProvider } from '../providers/form-message/form-message';
 import { UserProvider } from '../providers/user/user';
 import { ReportProvider } from '../providers/report/report';
 import { GoogleMapsProvider } from '../providers/google-maps/google-maps';
+import { GeoLocationProvider } from '../providers/geo-location/geo-location';
+//import { DatePipe } from '../pipes/date/date';
 
 
 // Auth Factory
@@ -37,11 +39,13 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions, stor
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp),
+    IonicModule.forRoot(MyApp, {
+      iconMode: 'md'
+    }),
     HttpModule,
     IonicStorageModule.forRoot({
       name: 'myapp',
-      driverOrder: ['localstorage']
+      driverOrder: ['localstorage'],
     }),
   ],
   bootstrap: [IonicApp],
@@ -67,7 +71,9 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions, stor
     Geolocation,
     ReportProvider,
     Events,
-    GoogleMapsProvider
+    GoogleMapsProvider,
+    GeoLocationProvider,
+  //  DatePipe
   ]
 })
 export class AppModule {}

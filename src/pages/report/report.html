@@ -14,28 +14,71 @@
 
 
 <ion-content>
+
+
+
   <div class="container">
     <map mapId="reportMap" (reportClick)="reportClick($event)"></map>
   </div>
+
+    <h3 padding>
+      {{report.title}}
+    </h3>
+    <ion-list no-lines>
+      <ion-item>
+        <ion-icon name="calendar" item-start color="secondary"></ion-icon>
+        <ion-note item-start>Date</ion-note>
+        <div item-end text-right>{{report.created | mydate}}</div>
+      </ion-item>
+      <ion-item>
+        <ion-icon name="pin" item-start color="secondary"></ion-icon>
+        <ion-note item-start>Emplacement</ion-note>
+        <div item-end text-right>{{report.place}}</div>
+      </ion-item>
+      <ion-item>
+        <ion-icon name="contact" item-start color="secondary"></ion-icon>
+        <ion-note item-start>Auteur</ion-note>
+        <button ion-button item-end text-right clear small color="secondary">{{report._creator.name}}</button>
+      </ion-item>
+    </ion-list>
+    <div padding class="reportDescription">{{report.description}}</div>
+    <div text-center *ngIf="opinion" class="opinion">
+      <ion-icon *ngIf="approves" name="thumbs-up"></ion-icon>
+      <ion-icon *ngIf="disapproves" name="thumbs-down"></ion-icon>
+      {{opinion}}
+    </div>
+    <ion-list no-lines>
+      <ion-item>
+        <button ion-button icon-left clear color="secondary" (click)="approve()" [disabled]="opinionGiven">
+          <ion-icon name="thumbs-up"></ion-icon>
+          <div>J'approuve</div>
+        </button>
+        <ion-badge item-end color="secondary">{{report.approved.length}}</ion-badge>
+      </ion-item>
+      <ion-item>
+        <button ion-button icon-left clear color="secondary" (click)="disapprove()" [disabled]="opinionGiven">
+          <ion-icon name="thumbs-down" ></ion-icon>
+          <div>Je désapprouve</div>
+        </button>
+        <ion-badge item-end color="secondary">{{report.disapproved.length}}</ion-badge>
+      </ion-item>
+    </ion-list>
+
   <div class="container">
     <ion-slides pager loop>
 
       <ion-slide style="background-color: green">
-        <h2>Slide 1</h2>
+        <img src="http://lorempixel.com/800/600/city">
       </ion-slide>
 
       <ion-slide style="background-color: blue">
-        <h2>Slide 2</h2>
+        <img src="http://lorempixel.com/801/600/city">
       </ion-slide>
 
       <ion-slide style="background-color: red">
-        <h2>Slide 3</h2>
+        <img src="http://lorempixel.com/802/601/city">
       </ion-slide>
 
     </ion-slides>
-  </div>
-  <div class="container" padding>
-    <p>{{report.description}}</p>
-    <p>{{report.created}}</p>
   </div>
 </ion-content>

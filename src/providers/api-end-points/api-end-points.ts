@@ -25,6 +25,14 @@ export class ApiEndPointsProvider {
     return this.API_URL + this.REPORT_PATH;
   }
 
+  get reportApprove(): string {
+    return this.reports + '/:rid/approve';
+  }
+
+  get reportDisapprove(): string {
+    return this.reports + '/:rid/disapprove';
+  }
+
   get auth():string {
     return this.users + `/isauth`;
   }
@@ -37,7 +45,7 @@ export class ApiEndPointsProvider {
     return this.users + "/signup";
   }
 
-  
+
 
 
 

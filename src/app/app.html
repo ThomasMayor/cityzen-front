@@ -5,10 +5,10 @@
     </ion-toolbar>
   </ion-header>-->
   <ion-content>
-    <div class="menu-hholder greenbg">
+    <div class="menu-holder greenbg">
       <div class="splash-logo"></div>
     </div>
-    <div class="menu-hholder"></div>
+    <div class="menu-holder"></div>
     <ion-list>
       <button menuClose ion-item *ngFor="let p of pages" (click)="openPage($event, p)">
         <ion-icon name="{{p.icon}}" item-start></ion-icon>{{p.title}}

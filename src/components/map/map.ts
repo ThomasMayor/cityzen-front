@@ -1,11 +1,12 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import {} from '@types/googlemaps';
-import { Geolocation, Geoposition } from '@ionic-native/geolocation';
-import { ToastController, AlertController } from 'ionic-angular';
+import { Geoposition } from '@ionic-native/geolocation';
+import { ToastController } from 'ionic-angular';
 import { Observable } from 'rxjs';
 import * as MarkerClusterer from 'node-js-marker-clusterer';
 import { IReport } from '../../models/report';
 import { ReportProvider } from '../../providers/report/report';
+import { GeoLocationProvider } from '../../providers/geo-location/geo-location';
 import { ReportPreviewPage } from '../../pages/report-preview/report-preview';
 import { GoogleMapsProvider } from '../../providers/google-maps/google-maps';
 
@@ -39,38 +40,85 @@ export class MapComponent {
   private markerCluster: MarkerClusterer;
   public initialized: boolean = false;
 
-  constructor(private geolocation: Geolocation,
-              private toastCtrl: ToastController,
+  constructor(private toastCtrl: ToastController,
               private reportProvider: ReportProvider,
-              private alertCtrl: AlertController,
-              private mapProvider: GoogleMapsProvider) {
+              private mapProvider: GoogleMapsProvider,
+              private geoLocationProvider: GeoLocationProvider) {
   }
 
   public init(centerOnUser: boolean, latitude?:number, longitude?:number, zoom:number=12): Promise<any> {
+    console.log('map init ', centerOnUser, latitude, longitude);
+    let mapInit = false;
     return new Promise<any>((resolve, reject) => {
- 
-      this.mapProvider.mapInitialized$.subscribe((initialized) => {
-        this.initialized = initialized;
-        if (initialized) {
-          if (!centerOnUser) {
-            this.initMap(latitude, longitude, zoom);
-          }
-          this.geolocation.getCurrentPosition().then((resp) => {
-            if (centerOnUser) {
-              this.initMap(resp.coords.latitude, resp.coords.longitude, zoom);
+
+      this.mapProvider.mapInitialized$.subscribe(
+        (initialized) => {
+          this.initialized = initialized;
+          if (initialized) {
+            if (!centerOnUser) {
+              this.initMap(latitude, longitude, zoom);
+              mapInit = true;
+              this.map.addListener('click', (e) => this.onMapClick(e))
+              resolve();
             }
-            this.initUserMarker(resp.coords.latitude, resp.coords.longitude);
-            this.watch = this.geolocation.watchPosition();
-            this.watch.filter((p) => p.coords !== undefined)
-                      .subscribe((resp) => { this.userMarker.setPosition(new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude)) });
-            
-            resolve();
-          }).catch((err) => { this.handleError(err); })
-            .then(err => reject(err));
-        }
-      })
+            this.geoLocationProvider.position$.subscribe((location:Geoposition) => {
+              if (!location)
+                return;
+              if (centerOnUser && !mapInit) {
+                this.initMap(location.coords.latitude, location.coords.longitude, zoom);
+                mapInit = true;
+                this.map.addListener('click', (e) => this.onMapClick(e))
+                this.initUserMarker(location.coords.latitude, location.coords.longitude);
+                resolve();
+              }
+              if (centerOnUser) {
+                this.userMarker.setPosition(new google.maps.LatLng(location.coords.latitude, location.coords.longitude))
+              }
+            })
+            /**/
+            /*
+            this.geolocation.getCurrentPosition().then((resp) => {
+              if (centerOnUser)
+                this.initMap(resp.coords.latitude, resp.coords.longitude, zoom);
+              this.map.addListener('click', (e) => this.onMapClick(e))
+              this.initUserMarker(resp.coords.latitude, resp.coords.longitude);
+              this.watch = this.geolocation.watchPosition();
+              this.watch.filter((p) => p.coords !== undefined)
+                        .subscribe((resp) => { this.userMarker.setPosition(new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude)) });
+
+              resolve();
+            }).catch((err) => { this.handleError(err); })
+              .then(err => reject(err));*/
+          }
+        },
+        (err) => reject(err)
+      )
 
     })
+  }
+
+  private onMapClick(e) {
+    console.log('map click', e);
+    let report:IReport = {
+      _id: null,
+      approved: [],
+      created: null,
+      description: "Description\ndu\nconstat",
+      disapproved: [],
+      latitude: e.latLng.lat(),
+      longitude: e.latLng.lng(),
+      pictures: [],
+      title: 'Titre du constat un peu long',
+      _creator: null,
+      place: '123 Route de Meyrin, 1202 Genève'
+    }
+    this.addMarker(e.latLng.lat(), e.latLng.lng(), '', report);
+    this.reportProvider.insert(report).subscribe(
+      data => {
+        console.log('Report inserted', data)
+      },
+      err => { console.log('Error while inserting report', err) }
+    );
   }
 
   private initMap(latitude:number, longitude:number, zoom: number) {
@@ -95,26 +143,7 @@ export class MapComponent {
   }
 
   private onMarkerClick(e:google.maps.MouseEvent, marker:any) {
-    this.alertReport(e, marker.data);
-  }
-
-  private alertReport(ev, report:IReport) {
-    console.log('alertReport', ev, report);
-    let prompt = this.alertCtrl.create({
-      title: report.title,
-      message: report.description,
-      buttons: [
-        {text: 'Fermer'},
-        {
-          text: 'Afficher',
-          handler: data => {
-            console.log('alert click', report);
-            this.showReport(report);
-          }
-        }
-      ]
-    }).present();
-
+    this.showReport(marker.data);
   }
 
   private showReport(report: IReport) {
@@ -137,7 +166,7 @@ export class MapComponent {
       path: google.maps.SymbolPath.CIRCLE,
       fillColor: '#039be5',
       fillOpacity: 0.8,
-      scale: 10,
+      scale: 8,
       strokeColor: 'white',
       strokeWeight: 2,
     };

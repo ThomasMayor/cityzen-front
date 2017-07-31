@@ -1,0 +1,57 @@
+page-new-report {
+  .container {
+    height: 33.33%;
+    position: relative;;
+  }
+  .container.slide-hidden {
+    position: absolute;
+    top: -34%;
+  }
+  .hidden {
+    display: none;
+  }
+  .profile-image-wrapper {
+    text-align: center;
+    margin: 20px 0;
+    color: white;
+
+    .profile-image {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+
+      display: inline-block;
+
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .profile-image-placeholder {
+      display: inline-block;
+
+      background-color: color($colors, 'secondary');
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+
+      font-size: 12px;
+
+      ion-icon {
+        font-size: 44px;
+        margin-bottom: -10px;
+        margin-top: 10px;
+      }
+    }
+  }
+  .close {
+    text-shadow: -1px -1px 1px #333, -1px 1px 1px #333, 1px -1px 1px #333, 1px 1px 1px #333;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 30;
+  }
+  .close ion-icon {
+    color: #fff;
+  }
+}

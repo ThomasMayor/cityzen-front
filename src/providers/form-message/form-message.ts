@@ -13,7 +13,7 @@ export class FormMessageProvider {
             'required': 'Requis',
             'email': 'Adresse email invalide',
             'invalidPassword': 'Invalid password. Password must be at least 6 characters long, and contain a number.',
-            'minlength': `Longueur minimun: ${validatorValue.requiredLength} caractères`
+            'minlength': `Longueur minimum: ${validatorValue.requiredLength} caractères`
         };
         return config[validatorName];
     }

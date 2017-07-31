@@ -15,7 +15,7 @@ import { FormMessageProvider } from '../../providers/form-message/form-message';
 export class FormMessageComponent {
 
   //error: string = '';
-  @Input() control: FormControl
+  @Input() control: FormControl;
 
   constructor(private formMessage: FormMessageProvider) {
   }
@@ -24,12 +24,9 @@ export class FormMessageComponent {
     for (let propertyName in this.control.errors) {
       if (this.control.errors.hasOwnProperty(propertyName) && this.control.touched) {
         let msg = this.formMessage.getValidatorErrorMessage(propertyName, this.control.errors[propertyName]);
-
-          console.log("Error with " + propertyName, msg);
         return msg;
       }
     }
-
     return '';
   }
 

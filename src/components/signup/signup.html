@@ -18,8 +18,11 @@
     <form-message [control]="credentials.controls.email"></form-message>
 
     <ion-item>
+      <button ion-button clear color="dark" type="button" large item-right (click)="togglePassword()" *ngIf="showPassword && credentials.value.password" class="btnPassword"> <ion-icon name="eye"> </ion-icon> </button>
+      <button ion-button clear color="dark" type="button" large item-right (click)="togglePassword()" *ngIf="!showPassword && credentials.value.password" class="btnPassword"> <ion-icon name="eye-off"> </ion-icon> </button>
       <ion-label floating>Mot de passe</ion-label>
-      <ion-input type="password" formControlName="password" clearOnEdit="false" ></ion-input>
+      <ion-input #inputPasswordSignup type="password" formControlName="password" clearOnEdit="false" ></ion-input>
+
     </ion-item>
     <form-message [control]="credentials.controls.password"></form-message>
 
