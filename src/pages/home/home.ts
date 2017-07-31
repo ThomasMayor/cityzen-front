@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { NavController, NavParams, IonicPage, ModalController, AlertController, PopoverController} from 'ionic-angular';
 import { MapComponent } from '../../components/map/map';
 import { ReportProvider } from '../../providers/report/report';
-import { IReport } from '../../models/report';
+import { IReport, reportCategoryHelper } from '../../models/report';
 /**
  * Generated class for the HomePage page.
  *
@@ -32,7 +32,7 @@ export class HomePage {
     console.log('ionViewDidLoad HomePage', this.map);
     this.map.init(true).then(_ => {
       this.reportProvider.loadAll().then(reports => {
-        reports.forEach(report => this.map.addMarker(report.latitude, report.longitude, '', report));
+        reports.forEach(report => this.map.addMarker(report.latitude, report.longitude, reportCategoryHelper.getColor(report.category), report));
       });
     });
   }
@@ -41,7 +41,7 @@ export class HomePage {
     console.log('report click');
     /*let popover = this.popoverCtrl.create('ReportPreviewPage', { report: report });
     popover.present()*/
-    let prompt = this.alertCtrl.create({
+    this.alertCtrl.create({
       title: report.title,
       message: report.description,
       buttons: [

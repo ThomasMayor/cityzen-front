@@ -52,6 +52,19 @@
       </ion-item>
       <form-message [control]="form.controls.description"></form-message>
       <ion-item>
+        <ion-label floating>Catégorie</ion-label>
+        <ion-select formControlName="category" okText="Choisir" cancelText="Annuler" [selectOptions]="{title: 'Catégorie', subTitle: 'Choisissez la catégorie de constat', mode: 'md'}">
+          <ion-option [value]="ReportCategory.Agriculture">{{reportCategoryHelper.getName(ReportCategory.Agriculture)}}</ion-option>
+          <ion-option [value]="ReportCategory.GreenSpaces">{{reportCategoryHelper.getName(ReportCategory.GreenSpaces)}}</ion-option>
+          <ion-option [value]="ReportCategory.SportAndYouth">{{reportCategoryHelper.getName(ReportCategory.SportAndYouth)}}</ion-option>
+          <ion-option [value]="ReportCategory.UrbanFurniture">{{reportCategoryHelper.getName(ReportCategory.UrbanFurniture)}}</ion-option>
+          <ion-option [value]="ReportCategory.Transports">{{reportCategoryHelper.getName(ReportCategory.Transports)}}</ion-option>
+          <ion-option [value]="ReportCategory.Health">{{reportCategoryHelper.getName(ReportCategory.Health)}}</ion-option>
+          <ion-option [value]="ReportCategory.Security">{{reportCategoryHelper.getName(ReportCategory.Security)}}</ion-option>
+          <ion-option [value]="ReportCategory.Social">{{reportCategoryHelper.getName(ReportCategory.Social)}}</ion-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
         <ion-label floating>Emplacement</ion-label>
         <ion-input type="text" formControlName="place" [disabled]="true"></ion-input>
       </ion-item>

@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { NavController, NavParams, IonicPage, ToastController } from 'ionic-angular';
-import { IReport } from '../../models/report';
+import { IReport, reportCategoryHelper } from '../../models/report';
 import { IUser } from '../../models/user';
 import { MapComponent } from '../../components/map/map';
 import { GoogleMapsProvider } from '../../providers/google-maps/google-maps';
@@ -65,7 +65,7 @@ export class ReportPage {
       if (initialized) {
         console.log('before init')
         this.map.init(false, this.report.latitude, this.report.longitude, 16);
-        this.map.addMarker(this.report.latitude, this.report.longitude, '', {});
+        this.map.addMarker(this.report.latitude, this.report.longitude, reportCategoryHelper.getColor(this.report.category), {});
         console.log('after init')
       }
     })

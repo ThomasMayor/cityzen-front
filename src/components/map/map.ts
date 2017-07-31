@@ -4,7 +4,7 @@ import { Geoposition } from '@ionic-native/geolocation';
 import { ToastController } from 'ionic-angular';
 import { Observable } from 'rxjs';
 import * as MarkerClusterer from 'node-js-marker-clusterer';
-import { IReport } from '../../models/report';
+import { IReport, ReportCategory } from '../../models/report';
 import { ReportProvider } from '../../providers/report/report';
 import { GeoLocationProvider } from '../../providers/geo-location/geo-location';
 import { ReportPreviewPage } from '../../pages/report-preview/report-preview';
@@ -110,7 +110,8 @@ export class MapComponent {
       pictures: [],
       title: 'Titre du constat un peu long',
       _creator: null,
-      place: '123 Route de Meyrin, 1202 Genève'
+      place: '123 Route de Meyrin, 1202 Genève',
+      category: <ReportCategory>Math.floor(Math.random() * 7)
     }
     this.addMarker(e.latLng.lat(), e.latLng.lng(), '', report);
     this.reportProvider.insert(report).subscribe(
@@ -184,7 +185,7 @@ export class MapComponent {
     let icon = {
       path: this.MAP_PIN_2,
       anchor: new google.maps.Point(25,50),
-      fillColor: '#039be5',
+      fillColor: /*'#039be5' */color,
       fillOpacity: 0.8,
       scale: 0.8,
       strokeColor: 'white',

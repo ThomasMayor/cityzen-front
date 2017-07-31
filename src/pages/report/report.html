@@ -36,6 +36,11 @@
         <div item-end text-right>{{report.place}}</div>
       </ion-item>
       <ion-item>
+        <ion-icon name="albums" item-start color="secondary"></ion-icon>
+        <ion-note item-start>Category</ion-note>
+        <div item-end text-right>{{report.category | reportCategory}}</div>
+      </ion-item>
+      <ion-item>
         <ion-icon name="contact" item-start color="secondary"></ion-icon>
         <ion-note item-start>Auteur</ion-note>
         <button ion-button item-end text-right clear small color="secondary">{{report._creator.name}}</button>

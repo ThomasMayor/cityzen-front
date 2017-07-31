@@ -6,6 +6,7 @@ import {} from '@types/googlemaps';
 import { Geoposition } from '@ionic-native/geolocation';
 import { Observable } from 'rxjs';
 import { GeoLocationProvider } from '../../providers/geo-location/geo-location';
+import { reportCategoryHelper, ReportCategory } from '../../models/report';
 /**
  * Generated class for the NewReportPage page.
  *
@@ -28,8 +29,9 @@ export class NewReportPage {
 
   @ViewChild('slides')
   private slides;
-
-  private geocoder = new google.maps.Geocoder
+  private reportCategoryHelper;
+  private geocoder = new google.maps.Geocoder;
+  private ReportCategory = ReportCategory;
 
   constructor(private navCtrl: NavController,
               private navParams: NavParams,
@@ -37,11 +39,12 @@ export class NewReportPage {
               private formBuilder: FormBuilder,
               private camera : Camera,
               private geoLocationProvider: GeoLocationProvider) {
-
+      this.reportCategoryHelper = reportCategoryHelper;
       this.form = this.formBuilder.group({
         title: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(30)])],
         description: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(500)])],
         place: ['', Validators.required],
+        category: ['', Validators.required]
       });
       console.log('asking geolocation');
       this.geoLocationProvider.position$.subscribe(
