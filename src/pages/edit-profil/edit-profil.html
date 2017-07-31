@@ -7,12 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Nouveau Constat</ion-title>
-    <ion-buttons left>
-        <button ion-button icon-only (click)="cancel()" class="mybackbtn">
-            <ion-icon name="arrow-back"></ion-icon>
-        </button>
-    </ion-buttons>
+    <ion-title>Mon Profil</ion-title>
     <ion-buttons end>
       <button ion-button icon-only (click)="createReport()" [disabled]="!form.valid || pictures.length == 0" strong>
         <ion-icon name="checkmark"></ion-icon>
@@ -34,7 +29,15 @@
   </div>
   <form *ngIf="form" [formGroup]="form" (ngSubmit)="createReport()" padding>
     <smart-image-picker (pictureSelected)="newPictureSelected($event)"></smart-image-picker>
-
+    <!--<input type="file" #fileInput style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage($event)" />
+    <div class="profile-image-wrapper" (click)="getPicture()" [ngClass]="{'disabled': pictures.length>=5}">
+      <div class="profile-image-placeholder">
+        <ion-icon name="add"></ion-icon>
+        <div>
+          Ajouter une<br>photo
+        </div>
+      </div>
+    </div>-->
     <ion-list>
       <ion-item>
         <ion-label floating>Titre du constat</ion-label>

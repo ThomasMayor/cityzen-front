@@ -4,7 +4,7 @@ import { Geoposition } from '@ionic-native/geolocation';
 import { ToastController } from 'ionic-angular';
 import { Observable } from 'rxjs';
 import * as MarkerClusterer from 'node-js-marker-clusterer';
-import { IReport, ReportCategory } from '../../models/report';
+import { IReport, ReportCategory, reportCategoryHelper } from '../../models/report';
 import { ReportProvider } from '../../providers/report/report';
 import { GeoLocationProvider } from '../../providers/geo-location/geo-location';
 import { ReportPreviewPage } from '../../pages/report-preview/report-preview';
@@ -111,9 +111,9 @@ export class MapComponent {
       title: 'Titre du constat un peu long',
       _creator: null,
       place: '123 Route de Meyrin, 1202 Genève',
-      category: <ReportCategory>Math.floor(Math.random() * 7)
+      category: <ReportCategory>Math.floor(Math.random() * ReportCategory.Last)
     }
-    this.addMarker(e.latLng.lat(), e.latLng.lng(), '', report);
+    this.addMarker(e.latLng.lat(), e.latLng.lng(), reportCategoryHelper.getColor(report.category), report);
     this.reportProvider.insert(report).subscribe(
       data => {
         console.log('Report inserted', data)

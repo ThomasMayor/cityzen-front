@@ -71,7 +71,9 @@
 
   <div class="container">
     <ion-slides pager loop>
-
+      <ion-slide *ngFor="let picture of report.pictures">
+        <img src="{{picture}}">
+      </ion-slide>
       <ion-slide style="background-color: green">
         <img src="http://lorempixel.com/800/600/city">
       </ion-slide>

@@ -67,6 +67,15 @@ export class HomePage {
 
   addReport() {
     console.log('addReport');
-    this.navCtrl.push('NewReportPage');
+    //this.navCtrl.push('NewReportPage');
+    let addModal = this.modalCtrl.create('NewReportPage');
+    addModal.onDidDismiss(item => {
+      if (item) {
+        console.log('New report : ', item)
+      }
+      else
+        console.log('No new report');
+    })
+    addModal.present();
   }
 }

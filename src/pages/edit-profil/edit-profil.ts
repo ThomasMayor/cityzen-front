@@ -1,5 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, ViewController, Platform } from 'ionic-angular';
+import { Camera, CameraOptions } from '@ionic-native/camera';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import {} from '@types/googlemaps';
 import { Geoposition } from '@ionic-native/geolocation';
@@ -9,7 +10,6 @@ import { ReportProvider } from '../../providers/report/report';
 import { reportCategoryHelper, ReportCategory, IReport } from '../../models/report';
 import { ToastController } from 'ionic-angular';
 import { SmartImagePickerComponent } from '../../components/smart-image-picker/smart-image-picker';
-
 /**
  * Generated class for the NewReportPage page.
  *
@@ -19,10 +19,10 @@ import { SmartImagePickerComponent } from '../../components/smart-image-picker/s
 
 @IonicPage()
 @Component({
-  selector: 'page-new-report',
-  templateUrl: 'new-report.html',
+  selector: 'page-edit-profil',
+  templateUrl: 'edit-profil.html',
 })
-export class NewReportPage {
+export class EditProfilPage {
 
   private form: FormGroup;
   private pictures: string[] = [];
@@ -49,6 +49,7 @@ export class NewReportPage {
               private viewCtrl: ViewController,
               private platform: Platform,
               private formBuilder: FormBuilder,
+              private camera : Camera,
               private geoLocationProvider: GeoLocationProvider,
               private toastCtrl: ToastController,
               private reportProvider: ReportProvider) {
@@ -113,6 +114,111 @@ export class NewReportPage {
     this.pictures.splice(index, 1);
     this.slides.slidePrev(0); //workaround to prevent splides to become blank
   }
+
+/*
+  getPicture() {
+    if (this.pictures.length >= 5)
+      return;
+    console.log('slides?',this.slides);
+    if (Camera['installed']()) {
+      this.camera.getPicture({
+        destinationType: this.camera.DestinationType.DATA_URL,
+        targetWidth: 800,
+        targetHeight: 600
+      }).then((data) => {
+        this.addPicture(data);
+      }, (err) => {
+        console.log('Unable to take photo', err);
+      })
+    } else {
+      this.fileInput.nativeElement.click();
+    }
+  }
+
+  processWebImage(event) {
+    let reader = new FileReader();
+    reader.onload = (readerEvent) => {
+      this.addPicture((readerEvent.target as any).result);
+    };
+    if (event.target.files.length)
+      reader.readAsDataURL(event.target.files[0]);
+  }
+
+  async takePicture() {
+    await this.platform.ready();
+
+    try {
+      let options: CameraOptions = {
+        quality: 100,
+        sourceType: this.camera.PictureSourceType.CAMERA,
+        destinationType: this.camera.DestinationType.DATA_URL,
+        encodingType: this.camera.EncodingType.JPEG,
+        mediaType: this.camera.MediaType.PICTURE,
+        targetHeight: 800,
+        targetWidth: 600
+      }
+
+      this.camera.getPicture(options).then(
+          (imageData) => { console.log('getPicture', imageData); },
+          (err) => console.log('getPicture Error', err));
+    }
+    catch (e) {
+      console.log('Camera Exception', e);
+    }
+  }
+
+  addPicture(data: string) {
+    if (data.indexOf('data:image/') == -1) {
+      data = 'data:image/jpeg;base64,' + data
+    }
+    //resize image
+    let canvas = document.createElement('canvas');
+  	if (canvas.getContext)
+		{
+  		let img = new Image();
+  		img.onload = (imageEvent) => {
+  			let ctx = canvas.getContext('2d');
+
+    		const MAX_WIDTH = 800;
+    		const MAX_HEIGHT = 600;
+
+    		let width = img.width;
+    		let height = img.height;
+
+    		if (width > height) {
+    		  if (width > MAX_WIDTH) {
+    		    height *= MAX_WIDTH / width;
+    		    width = MAX_WIDTH;
+    		  }
+    		}
+        else {
+    			if (height > MAX_HEIGHT) {
+	    		    width *= MAX_HEIGHT / height;
+	    		    height = MAX_HEIGHT;
+    			}
+    		}
+
+    		canvas.width = width;
+    		canvas.height = height;
+
+    		ctx.drawImage(img, 0, 0, width, height);
+        data = canvas.toDataURL('image/jpeg');
+
+        //add to slide
+        this.pictures.push(data);
+        this.slides.update();
+        setTimeout(_ => {
+          this.slides.update();
+          if (this.pictures.length > 1) {
+            this.slides.slideTo(this.pictures.length, 300, true);
+            this.slides.update();
+          }
+        }, 100);
+  		};
+  		img.src = data;
+		}
+  }
+*/
 
  newPictureSelected(image) {
    console.log('newPictureSelected', image.length)

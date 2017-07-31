@@ -16,17 +16,21 @@ export interface IReport {
 }
 
 export enum ReportCategory {
-  Agriculture,
+  Agriculture = 0,
   GreenSpaces,
   SportAndYouth,
   UrbanFurniture,
   Transports,
   Health,
   Social,
-  Security
+  Security,
+  Last = Security
 }
 
 export const reportCategoryHelper = {
+  get range() : number[] {
+    return Array(ReportCategory.Last + 1).fill(0).map((x,i)=>i)
+  },
   getColor(cat: ReportCategory): string {
     switch(cat) {
       case ReportCategory.Agriculture :

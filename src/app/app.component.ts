@@ -35,7 +35,6 @@ export class MyApp {
 
     this.authentication.authUser$.subscribe(user => {
       if (!this.initialized) {
-        this.statusBar.styleDefault();
         this.splashScreen.hide();
         this.initialized = true;
       }
@@ -49,6 +48,7 @@ export class MyApp {
 
   initializeApp() {
     this.platform.ready().then(() => {
+      this.statusBar.styleDefault();
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       this.authentication.checkLogin();

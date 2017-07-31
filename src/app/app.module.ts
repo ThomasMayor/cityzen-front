@@ -73,7 +73,6 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions, stor
     Events,
     GoogleMapsProvider,
     GeoLocationProvider,
-  //  DatePipe
   ]
 })
 export class AppModule {}

@@ -32,7 +32,7 @@ export class DatePipe implements PipeTransform {
       case 11 : month = 'décembre'; break;
     }
 
-    let ret = `${date.getDate()} ${month} ${date.getFullYear()}`;
+    let ret = `${date.getDate()}${date.getDate() == 1 ? "er" : ""} ${month} ${date.getFullYear()}`;
     console.log('DatePipe', value, ret);
     return ret;
   }

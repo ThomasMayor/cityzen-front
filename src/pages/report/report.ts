@@ -7,7 +7,6 @@ import { GoogleMapsProvider } from '../../providers/google-maps/google-maps';
 import { ReportProvider } from '../../providers/report/report';
 import { AuthenticationProvider } from '../../providers/authentication/authentication';
 
-
 /**
  * Generated class for the ReportPage page.
  *
@@ -27,6 +26,7 @@ export class ReportPage {
   private report:IReport;
   private showMap:boolean = true;
   private user: IUser = null;
+  private reportCategoryHelper = reportCategoryHelper;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -39,7 +39,7 @@ export class ReportPage {
   }
 
   get opinionGiven(): boolean {
-    return this.approves || this.disapproves;
+    return this.report._creator._id == this.user._id || this.approves || this.disapproves;
   }
 
   get approves(): boolean {

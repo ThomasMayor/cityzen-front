@@ -1,0 +1,15 @@
+<!-- Generated template for the SmartImagePickerComponent component -->
+<form>
+  <input type="file" #fileInput style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage($event)" />
+  <div class="profile-image-wrapper">
+    <div class="profile-image-placeholder" *ngIf="!imageData" (click)="getPicture()" [ngClass]="{'disabled': disabled}">
+      <ion-icon name="add"></ion-icon>
+      <div>
+        Ajouter une<br>photo
+      </div>
+    </div>
+    <div class="profile-image" [style.backgroundImage]="profileImageStyle" *ngIf="imageData">
+      <button ion-button class="camera-button" clear small (click)="getPicture()"><ion-icon name="camera" color="secondary"></ion-icon></button>
+    </div>
+  </div>
+</form>
