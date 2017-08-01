@@ -1,0 +1,32 @@
+<!--
+  Generated template for the ReportsPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Mes Constats</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-item-group light *ngFor="let group of reports | groupByMonth">
+    <ion-list-header>{{group.value | mydate:'month'}}</ion-list-header>
+    <ion-item  *ngFor="let report of group.list" (click)="showReport(report)">
+      <ion-icon name="pin" item-start [ngStyle]="{'color' :reportCategoryHelper.getColor(report.category)}" ></ion-icon>
+      <h2>{{report.title}}</h2>
+      <p>{{reportCategoryHelper.getName(report.category)}}</p>
+      <div class="opinion" item-end style="width: 60px; height: 100%;">
+        <div class="opinion-wrapper top" text-right><ion-icon name="thumbs-up" color="secondary"></ion-icon><ion-badge item-end color="secondary">{{report.approved.length}}</ion-badge></div>
+        <div class="opinion-wrapper bottom" text-right><ion-icon name="thumbs-down" color="secondary"></ion-icon><ion-badge item-end color="secondary">{{report.disapproved.length}}</ion-badge></div>
+      </div>
+    </ion-item>
+  </ion-item-group>
+</ion-content>

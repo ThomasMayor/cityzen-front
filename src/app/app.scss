@@ -39,6 +39,9 @@
   }
 
 }
+.userName {
+  color: color($colors, "primary");
+}
 body {
   ion-title .toolbar-title-md {
     font-weight: 300;
@@ -50,4 +53,12 @@ body {
   .note-md {
     color : #676767;
   }
+}
+button.button.btnPassword[item-right] {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  margin-bottom: -8px;
+  margin-right: -8px;
+  color: color($colors, 'primary');
 }

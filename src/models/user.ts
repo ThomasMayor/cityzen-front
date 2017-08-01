@@ -4,4 +4,5 @@ export interface IUser {
   admin: boolean;
   verified: boolean;
   name: string;
+  profilePicture: string;
 }

@@ -33,7 +33,7 @@
     <button ion-button clear large (click)="removePicture()" color="white" class="close"><ion-icon name="close"></ion-icon></button>
   </div>
   <form *ngIf="form" [formGroup]="form" (ngSubmit)="createReport()" padding>
-    <smart-image-picker (pictureSelected)="newPictureSelected($event)"></smart-image-picker>
+    <smart-image-picker [disabled]="disabledPicker" (pictureSelected)="pictureSelected($event)"></smart-image-picker>
 
     <ion-list>
       <ion-item>

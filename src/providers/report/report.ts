@@ -47,6 +47,7 @@ export class ReportProvider {
 
   loadAll(): Promise<any[]> {
     return new Promise((resolve, reject) => {
+
       this.authHttp.get(this.endpoints.reports)
                    .map(res => res.json())
                    .take(1)
@@ -60,5 +61,12 @@ export class ReportProvider {
                    );
     })
 
+  }
+
+  loadByUserId(uid: string): Observable<any> {
+    return this.authHttp
+               .get(this.endpoints.reports + '/byuser/' + uid)
+                 .map(res => res.json())
+                 .take(1);
   }
 }

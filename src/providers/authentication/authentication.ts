@@ -7,6 +7,7 @@ import { Observable, BehaviorSubject } from "rxjs";
 
 import { ApiEndPointsProvider } from '../api-end-points/api-end-points';
 import { IUser } from '../../models/user';
+import { UserProvider } from '../user/user';
 /*
   Generated class for the AuthenticationProvider provider.
 
@@ -20,10 +21,11 @@ export class AuthenticationProvider {
   public authUser$: Observable<IUser> = this.authUser.asObservable();
 
   constructor(private http: Http,
-              public authHttp: AuthHttp,
+              private authHttp: AuthHttp,
               private endpoints: ApiEndPointsProvider,
-              private readonly storage: Storage,
-              private readonly jwtHelper: JwtHelper) {
+              private userProvider: UserProvider,
+              private storage: Storage,
+              private jwtHelper: JwtHelper) {
     console.log('Hello AuthenticationProvider Provider');
   }
 
@@ -47,6 +49,11 @@ export class AuthenticationProvider {
     });
   }
 
+  signup(user: IUser): Observable<any> {
+    return this.userProvider.create(user)
+                            .map(jwt => { this.handleJwtResponse(jwt) });
+  }
+
   login(credentials: any): Observable<any> {
     return this.http.post(this.endpoints.login, credentials)
       .map(response => response.json())
@@ -57,13 +64,9 @@ export class AuthenticationProvider {
     this.storage.remove('jwt').then(() => this.authUser.next(null));
   }
 
-  signup(user: IUser): Observable<any> {
-    return this.http.post(this.endpoints.signup, user)
-      .map(response => response.json())
-      .map(jwt => { this.handleJwtResponse(jwt) });
-  }
 
-  private handleJwtResponse(jwt: any) {
+
+  handleJwtResponse(jwt: any) {
     console.log('handleJwtResponse', jwt);
     if (!jwt.success)
       throw Observable.throw(jwt.message);

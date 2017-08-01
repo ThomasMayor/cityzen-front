@@ -69,7 +69,7 @@ export const reportCategoryHelper = {
       case ReportCategory.Social :
         return 'Social';
       default :
-        return 'Security';
+        return 'Sécurité';
     }
   }
 }

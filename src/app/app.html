@@ -9,12 +9,16 @@
       <div class="splash-logo"></div>
     </div>
     <div class="menu-holder"></div>
+    <div padding text-center *ngIf="user">
+        <h1>Bienvenue</h1>
+        <h4 class="userName">{{user.name}}</h4>
+    </div>
     <ion-list>
       <button menuClose ion-item *ngFor="let p of pages" (click)="openPage($event, p)">
-        <ion-icon name="{{p.icon}}" item-start></ion-icon>{{p.title}}
+        <ion-icon color="secondary" name="{{p.icon}}" item-start></ion-icon>{{p.title}}
       </button>
       <div style="height: 50px"></div>
-      <button menuClose ion-item color="danger" (click)="logout()">
+      <button menuClose ion-item color="secondary" (click)="logout()">
         <ion-icon name="log-out" item-start></ion-icon>Déconnexion
       </button>
     </ion-list>

@@ -1,27 +1,6 @@
 page-edit-profil {
-  .container {
-    height: 33.33%;
-    position: relative;;
-  }
-  .container.slide-hidden {
-    position: absolute;
-    top: -34%;
-  }
-  .hidden {
-    display: none;
-  }
-  ion-buttons button[icon-only].mybackbtn {
-     margin: 0 6px;
-     min-width: 36px;
-  }
-  .close {
-    text-shadow: -1px -1px 1px #333, -1px 1px 1px #333, 1px -1px 1px #333, 1px 1px 1px #333;
-    position: absolute;
-    top: 0;
-    right: 0;
-    z-index: 30;
-  }
-  .close ion-icon {
-    color: #fff;
+  .info {
+    font-style: italic;
+    color: #333;
   }
 }

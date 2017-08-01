@@ -8,7 +8,6 @@ import { GeoLocationProvider } from '../../providers/geo-location/geo-location';
 import { ReportProvider } from '../../providers/report/report';
 import { reportCategoryHelper, ReportCategory, IReport } from '../../models/report';
 import { ToastController } from 'ionic-angular';
-import { SmartImagePickerComponent } from '../../components/smart-image-picker/smart-image-picker';
 
 /**
  * Generated class for the NewReportPage page.
@@ -24,17 +23,14 @@ import { SmartImagePickerComponent } from '../../components/smart-image-picker/s
 })
 export class NewReportPage {
 
+  private readonly MAX_PICTURES: number = 5;
+
   private form: FormGroup;
   private pictures: string[] = [];
 
-  @ViewChild(SmartImagePickerComponent)
-  private imagepicker: SmartImagePickerComponent;
-
-  @ViewChild('fileInput')
-  private fileInput;
-
   @ViewChild('slides')
   private slides;
+
   private reportCategoryHelper = reportCategoryHelper;
   private geocoder = new google.maps.Geocoder;
   private ReportCategory = ReportCategory;
@@ -43,6 +39,10 @@ export class NewReportPage {
 
   get showSlide(): boolean {
     return this.pictures.length == 0;
+  }
+
+  get disabledPicker() :boolean {
+    return this.pictures.length >= this.MAX_PICTURES;
   }
 
   constructor(private navCtrl: NavController,
@@ -114,7 +114,7 @@ export class NewReportPage {
     this.slides.slidePrev(0); //workaround to prevent splides to become blank
   }
 
- newPictureSelected(image) {
+ pictureSelected(image) {
    console.log('newPictureSelected', image.length)
    this.pictures.push(image);
    this.slides.update();

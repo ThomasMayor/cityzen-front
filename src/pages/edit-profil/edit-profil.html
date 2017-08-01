@@ -5,62 +5,40 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
   <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
     <ion-title>Mon Profil</ion-title>
     <ion-buttons end>
-      <button ion-button icon-only (click)="createReport()" [disabled]="!form.valid || pictures.length == 0" strong>
+      <button ion-button icon-only (click)="saveUser()" [disabled]="!form.valid" strong>
         <ion-icon name="checkmark"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
-
 </ion-header>
-
-
 <ion-content>
-  <div class="container" [ngClass]="{'slide-hidden': showSlide}">
-    <ion-slides pager #slides>
-      <ion-slide *ngFor="let picture of pictures">
-        <img src="{{picture}}">
-      </ion-slide>
-    </ion-slides>
-    <button ion-button clear large (click)="removePicture()" color="white" class="close"><ion-icon name="close"></ion-icon></button>
-  </div>
-  <form *ngIf="form" [formGroup]="form" (ngSubmit)="createReport()" padding>
-    <smart-image-picker (pictureSelected)="newPictureSelected($event)"></smart-image-picker>
-    <!--<input type="file" #fileInput style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage($event)" />
-    <div class="profile-image-wrapper" (click)="getPicture()" [ngClass]="{'disabled': pictures.length>=5}">
-      <div class="profile-image-placeholder">
-        <ion-icon name="add"></ion-icon>
-        <div>
-          Ajouter une<br>photo
-        </div>
-      </div>
-    </div>-->
+  <form *ngIf="form" [formGroup]="form" (ngSubmit)="saveUser()" padding>
+    <smart-image-picker (pictureSelected)="pictureSelected($event)" [imageData]="profilePicture" [profilePictureMode]="true" [pictWidth]="256" [pictHeight]="256"></smart-image-picker>
     <ion-list>
       <ion-item>
-        <ion-label floating>Titre du constat</ion-label>
-        <ion-input type="text" formControlName="title"></ion-input>
+        <ion-label floating>Nom complet</ion-label>
+        <ion-input type="text" formControlName="name"></ion-input>
       </ion-item>
-      <form-message [control]="form.controls.title"></form-message>
+      <form-message [control]="form.controls.name"></form-message>
       <ion-item>
-        <ion-label floating>Description</ion-label>
-        <ion-textarea formControlName="description" rows="4"></ion-textarea>
+        <ion-label floating>Email</ion-label>
+        <ion-input type="email" formControlName="email"></ion-input>
       </ion-item>
-      <form-message [control]="form.controls.description"></form-message>
+      <form-message [control]="form.controls.email"></form-message>
       <ion-item>
-        <ion-label floating>Catégorie</ion-label>
-        <ion-select formControlName="category" [selectOptions]="{'title': 'Catégorie', 'subTitle': '', 'mode': 'md'}" okText="Valider" cancelText="Annuler">
-          <ion-option *ngFor="let val of reportCategoryHelper.range" [value]="val">{{reportCategoryHelper.getName(val)}}</ion-option>
-        </ion-select>
+        <button ion-button clear color="dark" type="button" large item-right (click)="togglePassword()" *ngIf="showPassword && form.value.password" class="btnPassword"> <ion-icon name="eye"> </ion-icon> </button>
+        <button ion-button clear color="dark" type="button" large item-right (click)="togglePassword()" *ngIf="!showPassword && form.value.password" class="btnPassword"> <ion-icon name="eye-off"> </ion-icon> </button>
+        <ion-label floating>Mot de passe</ion-label>
+        <ion-input #inputPasswordSignup type="password" formControlName="password" clearOnEdit="false" ></ion-input>
       </ion-item>
-      <form-message [control]="form.controls.category"></form-message>
-      <ion-item>
-        <ion-label floating>Emplacement</ion-label>
-        <ion-input type="text" formControlName="place" [disabled]="true"></ion-input>
-      </ion-item>
-      <form-message [control]="form.controls.place"></form-message>
+      <form-message [control]="form.controls.password"></form-message>
+      <div class="info" padding>Saisir une valeur pour modifier le mot de passe, sinon laisser vide.</div>
     </ion-list>
   </form>
 </ion-content>

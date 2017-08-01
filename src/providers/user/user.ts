@@ -41,4 +41,15 @@ export class UserProvider {
 
   }
 
+  create(user: IUser): Observable<any> {
+    return this.http.post(this.endpoints.signup, user)
+      .map(response => response.json())
+
+  }
+
+  update(user: any, id: string): Observable<any> {
+    return this.authHttp.patch(this.endpoints.users + `/${id}`, user)
+      .map(response => response.json())
+  }
+
 }

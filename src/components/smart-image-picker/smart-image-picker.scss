@@ -13,6 +13,8 @@ smart-image-picker {
       background-repeat: no-repeat;
       background-size: cover;
       background-position: center;
+
+      position: relative;
     }
 
     .profile-image-placeholder {
@@ -40,7 +42,16 @@ smart-image-picker {
   }
   .camera-button {
     position: absolute;
-    bottom: 0;
-    right: 0;
+    bottom: -5px;
+    right: -5px;
+    border-radius: 50%;
+    background-color: color($colors, 'secondary');
+    color: white;
+    width: 40px;
+    height: 40px;
+    font-size: 150%;
+    padding-top: 7px;
+    text-align: center;
   }
+
 }

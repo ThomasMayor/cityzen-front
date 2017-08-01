@@ -1,7 +1,7 @@
 import { ToastController } from 'ionic-angular';
 
 export class CoreController {
-  constructor(private toastCtrl: ToastController) {
+  constructor(public toastCtrl: ToastController) {
   }
 
   showToast(msg: string) {

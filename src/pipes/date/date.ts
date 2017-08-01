@@ -13,7 +13,7 @@ export class DatePipe implements PipeTransform {
   /**
    * Takes a value and makes it lowercase.
    */
-  transform(value: string, ...args) {
+  transform(value: string, mode: string = 'full',...args) {
     console.log('DatePipe', value);
     let date = new Date(value);
     let month = '';
@@ -31,8 +31,10 @@ export class DatePipe implements PipeTransform {
       case 10 : month = 'novembre'; break;
       case 11 : month = 'décembre'; break;
     }
+    let ret = `${month} ${date.getFullYear()}`;
+    if (mode == 'full')
+      ret = `${date.getDate()}${date.getDate() == 1 ? "er" : ""} ` + ret;
 
-    let ret = `${date.getDate()}${date.getDate() == 1 ? "er" : ""} ${month} ${date.getFullYear()}`;
     console.log('DatePipe', value, ret);
     return ret;
   }

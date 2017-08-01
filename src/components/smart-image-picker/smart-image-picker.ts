@@ -29,8 +29,10 @@ export class SmartImagePickerComponent extends CoreController {
   @Output()
   public pictureSelected: EventEmitter<string> = new EventEmitter<string>();
 
-  public disabled:boolean = false;
+  @Input()
+  private disabled:boolean = false;
 
+  @Input()
   private imageData: string = '';
 
   constructor(toastCtrl: ToastController,
@@ -38,7 +40,6 @@ export class SmartImagePickerComponent extends CoreController {
               private camera : Camera,
               private actionSheetCtrl: ActionSheetController) {
     super(toastCtrl);
-    console.log('Hello SmartImagePickerComponent Component');
   }
 
   private get profileImageStyle():string {
