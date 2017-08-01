@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, ViewController, Platform } from 'ionic-angular';
+import { IonicPage, NavController, ViewController, Platform, NavParams } from 'ionic-angular';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import {} from '@types/googlemaps';
 import { Geoposition } from '@ionic-native/geolocation';
@@ -36,6 +36,7 @@ export class NewReportPage {
   private ReportCategory = ReportCategory;
   private geoLocationSub: Subscription;
   private location: {latitude:number, longitude: number};
+  private test:any;
 
   get showSlide(): boolean {
     return this.pictures.length == 0;
@@ -46,12 +47,15 @@ export class NewReportPage {
   }
 
   constructor(private navCtrl: NavController,
+              private navParams: NavParams,
               private viewCtrl: ViewController,
               private platform: Platform,
               private formBuilder: FormBuilder,
               private geoLocationProvider: GeoLocationProvider,
               private toastCtrl: ToastController,
               private reportProvider: ReportProvider) {
+      let test = this.navParams.get('test');
+      this.test = test;
       this.form = this.formBuilder.group({
         title: ['', Validators.compose([Validators.required, Validators.minLength(6), Validators.maxLength(30)])],
         description: ['', Validators.compose([Validators.required, Validators.minLength(6), Validators.maxLength(500)])],
@@ -70,11 +74,17 @@ export class NewReportPage {
           if (!location)
             return;
           console.log('into geo loc subs')
-          this.location = { latitude: location.coords.latitude, longitude: location.coords.longitude };
+          if (!test)
+            this.location = { latitude: location.coords.latitude, longitude: location.coords.longitude };
+          else
+            this.location = { latitude: test.lat, longitude: test.lng };
           if (this.geoLocationSub)
             this.geoLocationSub.unsubscribe();
           this.geocoder = new google.maps.Geocoder();
-          this.geocoder.geocode({'location': {lat: location.coords.latitude, lng: location.coords.longitude}},
+          let geoCoderOption = {location: {lat: location.coords.latitude, lng: location.coords.longitude}};
+          if (test)
+            geoCoderOption.location = { lat: test.lat, lng: test.lng };
+          this.geocoder.geocode(geoCoderOption,
             (result, status) => {
               console.log('Geocoder result', result, status);
               if (status == google.maps.GeocoderStatus.OK) {
@@ -136,7 +146,7 @@ export class NewReportPage {
       return;
     let report:IReport = {
       _id: null,
-      created: null,
+      created: this.test ? this.test.created : null,
       approved: [],
       disapproved: [],
       description: this.form.value.description,

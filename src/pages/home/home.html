@@ -13,7 +13,7 @@
   </ion-navbar>
 </ion-header>
 <ion-content>
-  <map mapId="mainMap" (reportClick)="reportClick($event)"></map>
+  <map mapId="mainMap" (reportClick)="reportClick($event)" (mapClick)="mapClick($event)"></map>
   <ion-fab right bottom *ngIf="map.initialized">
     <button ion-fab (click)="addReport()" color="secondary"><ion-icon name="add"></ion-icon></button>
  </ion-fab>

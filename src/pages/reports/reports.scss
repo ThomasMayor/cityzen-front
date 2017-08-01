@@ -1,5 +1,7 @@
 page-reports {
   .opinion {
+    width: 30px;
+    height: 100%;
     .opinion-wrapper {
       ion-badge.badge[item-end] {
         margin: 0;
@@ -7,14 +9,21 @@ page-reports {
       }
       &.top {
         position: absolute;
-        top : 10px;
+        top : 20px;
         right: 0px;
       }
       &.bottom {
         position: absolute;
-        bottom: 10px;
+        bottom: 20px;
         right: 0px;
       }
+      ion-icon {
+        font-size: 100%;
+      }
+
     }
+  }
+  .place {
+    color: color($colors, 'primary');
   }
 }

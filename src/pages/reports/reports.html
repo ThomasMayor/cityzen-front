@@ -20,12 +20,16 @@
   <ion-item-group light *ngFor="let group of reports | groupByMonth">
     <ion-list-header>{{group.value | mydate:'month'}}</ion-list-header>
     <ion-item  *ngFor="let report of group.list" (click)="showReport(report)">
-      <ion-icon name="pin" item-start [ngStyle]="{'color' :reportCategoryHelper.getColor(report.category)}" ></ion-icon>
+      <ion-avatar item-start>
+        <img src="{{report.pictures[0]}}">
+      </ion-avatar>
+      <!--<ion-icon name="pin" item-start [ngStyle]="{'color' :reportCategoryHelper.getColor(report.category)}" ></ion-icon>-->
       <h2>{{report.title}}</h2>
       <p>{{reportCategoryHelper.getName(report.category)}}</p>
-      <div class="opinion" item-end style="width: 60px; height: 100%;">
-        <div class="opinion-wrapper top" text-right><ion-icon name="thumbs-up" color="secondary"></ion-icon><ion-badge item-end color="secondary">{{report.approved.length}}</ion-badge></div>
-        <div class="opinion-wrapper bottom" text-right><ion-icon name="thumbs-down" color="secondary"></ion-icon><ion-badge item-end color="secondary">{{report.disapproved.length}}</ion-badge></div>
+      <p class="place">{{report.place}}</p>
+      <div class="opinion" item-end>
+        <div class="opinion-wrapper top" text-right><ion-icon name="thumbs-up" color="secondarydis"></ion-icon><ion-badge item-end color="secondarydis">{{report.approved.length}}</ion-badge></div>
+        <div class="opinion-wrapper bottom" text-right><ion-icon name="thumbs-down" color="secondarydis"></ion-icon><ion-badge item-end color="secondarydis">{{report.disapproved.length}}</ion-badge></div>
       </div>
     </ion-item>
   </ion-item-group>

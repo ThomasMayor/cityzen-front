@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { NavController, NavParams, IonicPage, ModalController, AlertController, PopoverController} from 'ionic-angular';
 import { MapComponent } from '../../components/map/map';
 import { ReportProvider } from '../../providers/report/report';
-import { IReport, reportCategoryHelper } from '../../models/report';
+import { IReport, reportCategoryHelper, ReportCategory } from '../../models/report';
 /**
  * Generated class for the HomePage page.
  *
@@ -35,6 +35,20 @@ export class HomePage {
         reports.forEach(report => this.map.addMarker(report.latitude, report.longitude, reportCategoryHelper.getColor(report.category), report));
       });
     });
+  }
+
+  mapClick(e) {
+    let addModal = this.modalCtrl.create('NewReportPage', {test: {lat: e.latLng.lat(),
+                                                           lng: e.latLng.lng(),
+                                                          created: new Date(Math.round(Math.random() * 49935600000) + 1451602800000)   }});
+    addModal.onDidDismiss(item => {
+      if (item) {
+        console.log('New report : ', item)
+      }
+      else
+        console.log('No new report');
+    })
+    addModal.present();
   }
 
   reportClick(report: IReport) {
