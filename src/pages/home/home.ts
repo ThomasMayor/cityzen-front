@@ -3,6 +3,7 @@ import { NavController, NavParams, IonicPage, ModalController, AlertController, 
 import { MapComponent } from '../../components/map/map';
 import { ReportProvider } from '../../providers/report/report';
 import { IReport, reportCategoryHelper, ReportCategory } from '../../models/report';
+import { DateFilter } from '../../models/filter';
 /**
  * Generated class for the HomePage page.
  *
@@ -19,6 +20,7 @@ export class HomePage {
   @ViewChild(MapComponent)
   private map: MapComponent;
 
+  private filter:DateFilter;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -26,6 +28,7 @@ export class HomePage {
               public modalCtrl: ModalController,
               private alertCtrl: AlertController,
               private popoverCtrl: PopoverController) {
+    this.filter = DateFilter.month;
   }
 
   ionViewDidLoad() {
@@ -35,6 +38,11 @@ export class HomePage {
         reports.forEach(report => this.map.addMarker(report.latitude, report.longitude, reportCategoryHelper.getColor(report.category), report));
       });
     });
+  }
+
+  moreClick(e) {
+      console.log('moreClick')
+      this.popoverCtrl.create('FilterPage', { filter: this.filter }).present({ev: e});
   }
 
   mapClick(e) {

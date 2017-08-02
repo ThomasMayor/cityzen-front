@@ -27,12 +27,12 @@ export class GroupByMonthPipe implements PipeTransform {
       (item:any)=> { return item })
       .flatMap(group => group.toArray())
       .subscribe((data)=>{
-        
+
         let valueDate = new Date(data[0].created);
         let groupDate = new Date(valueDate.getFullYear(), valueDate.getMonth());
         results.push({value:groupDate,list:data});
       })
-    console.log('GroupByMonthPipe results', results);
+    //console.log('GroupByMonthPipe results', results);
     return results;
   }
 }
