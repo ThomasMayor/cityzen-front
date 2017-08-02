@@ -17,6 +17,9 @@
 
 
 <ion-content padding>
+  <div *ngIf="reports.length == 0" text-center>
+    <p>Vous n'avez pas encore créé de constat.</p>
+  </div>
   <ion-item-group light *ngFor="let group of reports | groupByMonth">
     <ion-list-header>{{group.value | mydate:'month'}}</ion-list-header>
     <ion-item  *ngFor="let report of group.list" (click)="showReport(report)">

@@ -3,4 +3,18 @@ page-edit-profil {
     font-style: italic;
     color: #333;
   }
+  .score-tip {
+    color: #777;
+    .score-tip-icon {
+      float: left;
+      font-size: 200%;
+    }
+    .score-tip-text {
+      padding-left: 48px;
+      strong {
+        color: color($colors, 'secondary');
+      }
+    }
+
+  }
 }

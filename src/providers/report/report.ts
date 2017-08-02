@@ -5,7 +5,8 @@ import { JwtHelper, AuthHttp } from 'angular2-jwt';
 import { Observable, BehaviorSubject } from "rxjs";
 
 import { ApiEndPointsProvider } from '../api-end-points/api-end-points';
-import { IReport } from '../../models/report';
+import { IReport, ReportCategory } from '../../models/report';
+import { DateFilter } from '../../models/filter';
 /*
   Generated class for the ReportProvider provider.
 
@@ -45,10 +46,12 @@ export class ReportProvider {
                         .take(1);
   }
 
-  loadAll(): Promise<any[]> {
+  loadAll(filters:any): Promise<any[]> {
+    console.log('load all reports', filters);
     return new Promise((resolve, reject) => {
-
-      this.authHttp.get(this.endpoints.reports)
+      if (filters.categoryFilter === null)
+        delete filters.categoryFilter;
+      this.authHttp.get(this.endpoints.reports, { params: filters})
                    .map(res => res.json())
                    .take(1)
                    .subscribe(

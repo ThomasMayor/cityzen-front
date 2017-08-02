@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, ViewController, Platform, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, ViewController, Platform, NavParams, AlertController, ToastController } from 'ionic-angular';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import {} from '@types/googlemaps';
 import { Geoposition } from '@ionic-native/geolocation';
@@ -7,7 +7,6 @@ import { Observable, Subscription } from 'rxjs';
 import { GeoLocationProvider } from '../../providers/geo-location/geo-location';
 import { ReportProvider } from '../../providers/report/report';
 import { reportCategoryHelper, ReportCategory, IReport } from '../../models/report';
-import { ToastController } from 'ionic-angular';
 
 /**
  * Generated class for the NewReportPage page.
@@ -53,6 +52,7 @@ export class NewReportPage {
               private formBuilder: FormBuilder,
               private geoLocationProvider: GeoLocationProvider,
               private toastCtrl: ToastController,
+              private alertCtrl: AlertController,
               private reportProvider: ReportProvider) {
       let test = this.navParams.get('test');
       this.test = test;
@@ -87,8 +87,24 @@ export class NewReportPage {
           this.geocoder.geocode(geoCoderOption,
             (result, status) => {
               console.log('Geocoder result', result, status);
+              console.log(result.find((item) => item.address_components.find((adr) => adr.short_name === "GE") !== undefined))
               if (status == google.maps.GeocoderStatus.OK) {
-                this.form.controls['place'].setValue(result[0].formatted_address);
+                if (-1 == result.findIndex((item) => item.address_components.find((adr) => adr.short_name === "GE") !== undefined)) {
+                  const alert = this.alertCtrl.create({ enableBackdropDismiss: false,
+                                                        title: 'Erreur',
+                                                        message: 'Impossible de créer un constat, vous devez obligatoirement vous trouver dans le canton de Genève.',
+                                                        buttons: [{
+                                                          text: 'Fermer',
+                                                          handler: () => {
+                                                            this.viewCtrl.dismiss();
+                                                          }
+                                                        }]
+                                                      });
+                  alert.present();
+                }
+                else {
+                  this.form.controls['place'].setValue(result[0].formatted_address);
+                }
               }
               else {
                 this.showToast('Impossible de géolocaliser votre emplacement. Veuillez réessayer.')
@@ -163,7 +179,23 @@ export class NewReportPage {
         .subscribe(
           (result) => {
             if (!result.success) {
-              this.showToast('Une erreur est survenue lors du traitement de votre requête. Veuillez rééessayer.');
+              if (result.needwait) {
+                const alert = this.alertCtrl.create({ enableBackdropDismiss: false,
+                                                      subTitle: 'Merci de votre participation !',
+                                                      title: 'Merci !',
+                                                      message: result.message,
+                                                      buttons: [{
+                                                        text: 'Fermer',
+                                                        handler: () => {
+                                                          this.viewCtrl.dismiss();
+                                                        }
+                                                      }]
+                                                    });
+                alert.present();
+              }
+              else {
+                this.showToast('Une erreur est survenue lors du traitement de votre requête. Veuillez rééessayer.');
+              }
             }
             else {
               this.viewCtrl.dismiss(result.report);

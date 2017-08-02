@@ -43,7 +43,7 @@
       <ion-item>
         <ion-icon name="contact" item-start color="secondary"></ion-icon>
         <ion-note item-start>Auteur</ion-note>
-        <button ion-button item-end text-right clear small color="secondary">{{report._creator.name}}</button>
+        <button ion-button item-end text-right clear small color="secondary" (click)="showProfile(report._creator)">{{report._creator.name}}</button>
       </ion-item>
     </ion-list>
     <div padding class="reportDescription">{{report.description}}</div>

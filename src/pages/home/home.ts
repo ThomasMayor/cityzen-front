@@ -4,6 +4,7 @@ import { MapComponent } from '../../components/map/map';
 import { ReportProvider } from '../../providers/report/report';
 import { IReport, reportCategoryHelper, ReportCategory } from '../../models/report';
 import { DateFilter } from '../../models/filter';
+import { ReportFilterProvider } from '../../providers/report-filter/report-filter';
 /**
  * Generated class for the HomePage page.
  *
@@ -20,29 +21,64 @@ export class HomePage {
   @ViewChild(MapComponent)
   private map: MapComponent;
 
-  private filter:DateFilter;
+  private _dateFilter:DateFilter;
+  private _categoryFilter:ReportCategory|null;
+  private autoRefreshReports: boolean = true;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               private reportProvider: ReportProvider,
               public modalCtrl: ModalController,
               private alertCtrl: AlertController,
-              private popoverCtrl: PopoverController) {
-    this.filter = DateFilter.month;
+              private popoverCtrl: PopoverController,
+              private reportFilter: ReportFilterProvider) {
+    this.autoRefreshReports = false;
+    this.reportFilter.categoryFilter$.subscribe((filter) => {
+      this.categoryFilter = filter;
+    })
+    this.reportFilter.dateFilter$.subscribe((filter) => {
+      this.dateFilter = filter;
+    })
+    this.autoRefreshReports = true;
+  }
+
+  private set dateFilter(filter:DateFilter) {
+    console.log('set dateFilter', filter, this._dateFilter)
+    if (this._dateFilter !== filter) {
+      this._dateFilter = filter;
+      if (this.autoRefreshReports)
+        this.refreshReports();
+    }
+  }
+
+  private set categoryFilter(filter:ReportCategory|null) {
+    console.log('set categoryFilter', filter, this._categoryFilter)
+    if (this._categoryFilter !== filter) {
+      this._categoryFilter = filter;
+
+      if (this.autoRefreshReports)
+        this.refreshReports();
+    }
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad HomePage', this.map);
     this.map.init(true).then(_ => {
-      this.reportProvider.loadAll().then(reports => {
-        reports.forEach(report => this.map.addMarker(report.latitude, report.longitude, reportCategoryHelper.getColor(report.category), report));
-      });
+      this.refreshReports();
+
+    });
+  }
+
+  refreshReports() {
+    this.reportProvider.loadAll({dateFilter: this._dateFilter, categoryFilter: this._categoryFilter}).then(reports => {
+      this.map.clearMarkers();
+      reports.forEach(report => this.map.addMarker(report.latitude, report.longitude, reportCategoryHelper.getColor(report.category), report));
     });
   }
 
   moreClick(e) {
-      console.log('moreClick')
-      this.popoverCtrl.create('FilterPage', { filter: this.filter }).present({ev: e});
+    console.log('moreClick', e)
+    this.popoverCtrl.create('FilterPage').present({ev: e});
   }
 
   mapClick(e) {

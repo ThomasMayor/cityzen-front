@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage } from 'ionic-angular';
 import { DateFilter } from '../../models/filter';
+import { ReportFilterProvider } from '../../providers/report-filter/report-filter';
+import { ReportCategory, reportCategoryHelper } from '../../models/report';
 
 /**
  * Generated class for the FilterPage page.
@@ -16,10 +18,32 @@ import { DateFilter } from '../../models/filter';
 })
 export class FilterPage {
 
-  private dateFilter: DateFilter;
+  private _dateFilter: DateFilter;
+  private _categoryFilter: ReportCategory|null;
+  private reportCategoryHelper = reportCategoryHelper;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-    this.dateFilter = this.navParams.get('filter');
+  constructor(private reportFilter: ReportFilterProvider) {
+    this.reportFilter.dateFilter$.subscribe((filter) => { this._dateFilter = filter; });
+    this.reportFilter.categoryFilter$.subscribe((filter) => { this._categoryFilter = filter; });
+  }
+
+  private get dateFilter(): DateFilter {
+    return this._dateFilter;
+  }
+
+  private set dateFilter(filter:DateFilter) {
+    this._dateFilter = filter;
+    this.reportFilter.setDateFilter(this._dateFilter);
+  }
+
+
+  private get categoryFilter(): any {
+    return this._categoryFilter === null ? 'null' : this._categoryFilter;
+  }
+
+  private set categoryFilter(filter:any) {
+    this._categoryFilter = filter === 'null' ? null : filter;
+    this.reportFilter.setCategoryFilter(this._categoryFilter);
   }
 
   ionViewDidLoad() {

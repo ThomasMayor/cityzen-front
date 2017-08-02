@@ -18,6 +18,7 @@ export class MyApp {
   rootPage: any = 'WelcomePage';
   pages: Array<{title: string, page: string, icon: string, params: any}>;
   private initialized: boolean = false;
+  private refreshUserInt: any = null;
 
   constructor(public platform: Platform,
               public statusBar: StatusBar,
@@ -41,6 +42,14 @@ export class MyApp {
         this.initialized = true;
       }
       this.user = user;
+      //refresh user each five minutes for score
+      if (user && !this.refreshUserInt) {
+        this.refreshUserInt = setInterval(_ => this.authentication.checkLogin(), 300000);
+      }
+      else if (!user && this.refreshUserInt) {
+        clearInterval(this.refreshUserInt);
+        this.refreshUserInt = null;
+      }
       this.rootPage = user != null ? 'HomePage' : 'WelcomePage';
       this.pages.find((item) => item.page == 'ReportsPage').params = { user: user};
     },

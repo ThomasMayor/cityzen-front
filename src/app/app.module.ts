@@ -19,6 +19,7 @@ import { UserProvider } from '../providers/user/user';
 import { ReportProvider } from '../providers/report/report';
 import { GoogleMapsProvider } from '../providers/google-maps/google-maps';
 import { GeoLocationProvider } from '../providers/geo-location/geo-location';
+import { ReportFilterProvider } from '../providers/report-filter/report-filter';
 //import { DatePipe } from '../pipes/date/date';
 
 
@@ -73,6 +74,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions, stor
     Events,
     GoogleMapsProvider,
     GeoLocationProvider,
+    ReportFilterProvider,
   ]
 })
 export class AppModule {}

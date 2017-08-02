@@ -33,12 +33,10 @@ export class MapComponent {
   mapClick: EventEmitter<any> = new EventEmitter<any>();
 
 
-  private readonly MAP_PIN:string = 'M0-48c-9.8 0-17.7 7.8-17.7 17.4 0 15.5 17.7 30.6 17.7 30.6s17.7-15.4 17.7-30.6c0-9.6-7.9-17.4-17.7-17.4z';
-  private readonly MAP_PIN_2:string = 'M25 0c-8.284 0-15 6.656-15 14.866 0 8.211 15 35.135 15 35.135s15-26.924 15-35.135c0-8.21-6.716-14.866-15-14.866zm-.049 19.312c-2.557 0-4.629-2.055-4.629-4.588 0-2.535 2.072-4.589 4.629-4.589 2.559 0 4.631 2.054 4.631 4.589 0 2.533-2.072 4.588-4.631 4.588z';
+  private readonly MAP_PIN:string = 'M25 0c-8.284 0-15 6.656-15 14.866 0 8.211 15 35.135 15 35.135s15-26.924 15-35.135c0-8.21-6.716-14.866-15-14.866zm-.049 19.312c-2.557 0-4.629-2.055-4.629-4.588 0-2.535 2.072-4.589 4.629-4.589 2.559 0 4.631 2.054 4.631 4.589 0 2.533-2.072 4.588-4.631 4.588z';
   private map: google.maps.Map;
   private userMarker: google.maps.Marker;
   private watch: Observable<Geoposition>;
-  private markerIndex: number = 0;
   private markers: Array<google.maps.Marker> = [];
   private markerCluster: MarkerClusterer;
   public initialized: boolean = false;
@@ -87,29 +85,7 @@ export class MapComponent {
   }
 
   private onMapClick(e) {
-    this.mapClick.emit(e);/*
-    console.log('map click', e);
-    let report:IReport = {
-      _id: null,
-      approved: [],
-      created: null,
-      description: "Description\ndu\nconstat",
-      disapproved: [],
-      latitude: e.latLng.lat(),
-      longitude: e.latLng.lng(),
-      pictures: [],
-      title: 'Titre du constat un peu long',
-      _creator: null,
-      place: '123 Route de Meyrin, 1202 Genève',
-      category: <ReportCategory>Math.floor(Math.random() * ReportCategory.Last)
-    }
-    this.addMarker(e.latLng.lat(), e.latLng.lng(), reportCategoryHelper.getColor(report.category), report);
-    this.reportProvider.insert(report).subscribe(
-      data => {
-        console.log('Report inserted', data)
-      },
-      err => { console.log('Error while inserting report', err) }
-    );*/
+    this.mapClick.emit(e);
   }
 
   private initMap(latitude:number, longitude:number, zoom: number) {
@@ -173,7 +149,7 @@ export class MapComponent {
   public addMarker(lat:number, long:number, color:string, data: any) {
     //console.log('addMarker', lat, long, data)
     let icon = {
-      path: this.MAP_PIN_2,
+      path: this.MAP_PIN,
       anchor: new google.maps.Point(25,50),
       fillColor: /*'#039be5' */color,
       fillOpacity: 0.8,
@@ -191,13 +167,13 @@ export class MapComponent {
     this.markerCluster.addMarkers([marker], false);
   }
 
-  public addMarker2(lat:number, long:number, color:string, title:string) {
-      let marker = new google.maps.Marker({
-        position: new google.maps.LatLng(lat, long),
-        title: 'Votre position',
-        map: this.map,
-      });
+  public clearMarkers() {
+    this.markers.forEach((marker, index) => {
+      this.markerCluster.removeMarker(marker, index < this.markers.length - 1);
+    })
+    this.markers = [];
   }
+
 
 }
 

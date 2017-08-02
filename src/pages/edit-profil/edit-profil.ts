@@ -7,7 +7,7 @@ import { Observable, Subscription } from 'rxjs';
 import { UserProvider } from '../../providers/user/user';
 import { AuthenticationProvider } from '../../providers/authentication/authentication';
 import { ToastController } from 'ionic-angular';
-import { IUser } from '../../models/user';
+import { IUser, userScore } from '../../models/user';
 /**
  * Generated class for the NewReportPage page.
  *
@@ -56,6 +56,11 @@ export class EditProfilPage {
           });
         }
       );
+  }
+
+
+  get score(): number {
+    return userScore.compute(this.user); 
   }
 
   togglePassword() {

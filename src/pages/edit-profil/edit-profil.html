@@ -20,6 +20,16 @@
 <ion-content>
   <form *ngIf="form" [formGroup]="form" (ngSubmit)="saveUser()" padding>
     <smart-image-picker (pictureSelected)="pictureSelected($event)" [imageData]="profilePicture" [profilePictureMode]="true" [pictWidth]="256" [pictHeight]="256"></smart-image-picker>
+    <h1 text-center>Score: {{score}}</h1>
+    <div class="score-tip">
+      <div class="score-tip-icon">
+        <ion-icon name="information-circle" item-start color="secondary"></ion-icon>
+      </div>
+      <div class="score-tip-text" padding>
+        Votre <strong>score</strong> augmentera lorsque des utilisateurs approuveront vos constats.<br><br>
+        Vous pouvez augmenter l'approbation de vos constats en soignant la qualité de leur description et des photographies les accompagnant.
+      </div>
+    </div>
     <ion-list>
       <ion-item>
         <ion-label floating>Nom complet</ion-label>

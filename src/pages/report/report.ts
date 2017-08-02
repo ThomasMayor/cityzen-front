@@ -126,4 +126,9 @@ export class ReportPage {
     toast.present();
   }
 
+  showProfile(user) {
+    console.log('profile click');
+    this.navCtrl.push('ProfilPage', { user: user});
+  }
+
 }

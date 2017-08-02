@@ -31,19 +31,16 @@ export class AuthenticationProvider {
 
   checkLogin() {
     this.storage.get('jwt').then(jwt => {
-      console.log('checkLogin', jwt)
       if (jwt && !this.jwtHelper.isTokenExpired(jwt)) {
-        console.log('Not Expired', this.endpoints.auth);
         this.authHttp.get(this.endpoints.auth)
                      .map(res => res.json())
                      .map(jwt => this.handleJwtResponse(jwt))
                      .take(1)
                      .subscribe(
-                       () => { console.log('checkLogin 2'); }
+                       () => { }
                      )
       }
       else {
-        console.log('Expired');
         this.storage.remove('jwt').then(() => this.authUser.next(null));
       }
     });

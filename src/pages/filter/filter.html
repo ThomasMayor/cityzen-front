@@ -9,14 +9,21 @@
   <ion-list>
     <ion-item>
       <ion-label floating>
-        Filtrer par date
+        Date
       </ion-label>
       <ion-select [(ngModel)]="dateFilter">
+        <ion-option value="4">Indifférente</ion-option>
         <ion-option value="0">Moins d'un jour</ion-option>
         <ion-option value="1">Moins d'une semaine</ion-option>
         <ion-option value="2">Moins d'un mois</ion-option>
         <ion-option value="3">Moins d'un an</ion-option>
-        <ion-option value="4">Tous</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Catégorie</ion-label>
+      <ion-select [(ngModel)]="categoryFilter" [selectOptions]="{'title': 'Catégorie', 'subTitle': '', 'mode': 'md'}" okText="Valider" cancelText="Annuler">
+        <ion-option value="null">Toutes</ion-option>
+        <ion-option *ngFor="let val of reportCategoryHelper.range" [value]="val">{{reportCategoryHelper.getName(val)}}</ion-option>
       </ion-select>
     </ion-item>
   </ion-list>
